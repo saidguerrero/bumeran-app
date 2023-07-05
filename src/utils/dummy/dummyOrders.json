@@ -1,0 +1,62 @@
+{
+  "status": "success",
+  "code": "OK000",
+  "result":  {
+    "dollar" : "15.67",
+    "euro" : "18.67",
+   "orders" : [
+
+      {
+          "id": 666,
+          "quotationSheet": "0031",
+          "fullName": "CRUZ BETANZOS ANGEL",
+          "amount": "5,537.25",
+          "travelInfo": "MEX a HUX",
+          "supplier": "MAGNICHARTERS",
+          "reservationNumber": "WAD19134V35",
+          "city": "Estado de Mexico",
+          "branch": "ORIENTE",
+          "salesPerson": "Said Guerrero",
+          "orderDate": "03-05-2023",
+          "quoteStatus": "PENDIENTE",
+          "paidStatus": "PENDIENTE",
+          "contactPhoneNum": "5555566666",
+          "contactEmail": "said@said.com",
+          "emergencyContactPhone": "3344008912",
+          "hasFiles": false,
+          "orderFileResponse" : {
+            "idPayOrder" : 1,
+            "idGeneralData" : 2,
+            "idTermsAndConditions" : 3
+          }
+      },
+      {
+          "id":777,
+          "quotationSheet": "0032",
+          "fullName": "ANGEL CRUZ BETANZOS",
+          "amount": "22,851.98",
+          "travelInfo": "GRAN DEAL COZUMEL ¥",
+          "supplier": "EUROMUNDO",
+          "reservationNumber": "D44MJZ",
+          "city": "CDMX",
+          "branch": "NORTE",
+          "salesPerson": "Jorge Barron",
+          "orderDate": "03-05-2023",
+          "quoteStatus": "PENDIENTE",
+          "paidStatus": "PENDIENTE",
+          "contactPhoneNum": "8899007766",
+          "contactEmail": "cruz@gmail.com",
+          "emergencyContactPhone": "5534566677",
+          "hasFiles": true,
+          "orderFileResponse" : {
+            "idPayOrder" : 1,
+            "idGeneralData" : 2,
+            "idTermsAndConditions" : 3
+          }
+      }
+     
+    
+  ]},
+  "httpCode": "OK",
+  "error": null
+}
