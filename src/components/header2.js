@@ -1,11 +1,11 @@
 import Image from "next/image";
 import React, { useContext } from "react";
-import bumeran from "../img/bumeran_white.svg";
+import bumeran from "/bumeran_white.svg";
 import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineLogout } from "react-icons/md";
 import AppContext from "@/components/AppContext";
-import priceShoesLogo from "../img/priceShoesLogo.png";
+import priceShoesLogo from "/priceShoesLogo.png";
 import { Tab } from "@mui/material";
 
 export default function Header() {

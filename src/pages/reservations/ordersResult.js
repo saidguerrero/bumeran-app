@@ -10,7 +10,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
-import data from "../../utils/dummy/dummyOrders.json";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,7 +58,7 @@ const Reservaciones = () => {
 
       // const response = data;
       // const items = await response.json();
-      const items = data;
+      const items = [];
       console.log(items);
       setOrders(items.result);
       // setOrders(response.result);

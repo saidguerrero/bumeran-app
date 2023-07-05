@@ -1,12 +1,7 @@
 import Image from "next/image";
 import React, { useContext } from "react";
-import bumeran from "../img/bumeran_white.svg";
 import Link from "next/link";
-import { CgProfile } from "react-icons/cg";
-import { MdOutlineLogout } from "react-icons/md";
 import AppContext from "@/components/AppContext";
-import priceShoesLogo from "../img/priceShoesLogo.png";
-import { Tab } from "@mui/material";
 
 export default function Header() {
   const context = useContext(AppContext);
@@ -14,7 +9,12 @@ export default function Header() {
     <header>
       <div className=" flex justify-between items-center p-4">
         <div className="container flex flex-col items-start justify-center ">
-          <Image alt="Bumeran" src={priceShoesLogo} width={100} height={30} />
+          <Image
+            alt="Bumeran"
+            src={"/priceShoesLogo.png"}
+            width={100}
+            height={30}
+          />
         </div>
 
         <div className="container flex flex-col items-center justify-center ">

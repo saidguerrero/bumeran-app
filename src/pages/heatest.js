@@ -1,12 +1,7 @@
 import Image from "next/image";
 import React, { useContext } from "react";
-import bumeran from "../img/bumeran_white.svg";
-import Link from "next/link";
-import { CgProfile } from "react-icons/cg";
-import { MdOutlineLogout } from "react-icons/md";
 import AppContext from "@/components/AppContext";
-import priceShoesLogo from "../img/priceShoesLogo.png";
-import { Tab } from "@mui/material";
+import priceShoesLogo from "/priceShoesLogo.png";
 
 export default function Header() {
   const context = useContext(AppContext);

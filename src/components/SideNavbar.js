@@ -7,10 +7,6 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { HiOutlineDatabase } from "react-icons/hi";
 import Link from "next/link";
 import Image from "next/image";
-import cerrarSesion from "../img/cerrarSesion.png";
-import dolar from "../img/dolar.png";
-import cotizacion from "../img/cotizacion.png";
-import reservaciones from "../img/reservaciones.png";
 import AppContext from "./AppContext";
 import { useRouter } from "next/router";
 
@@ -49,7 +45,7 @@ const SideNavbar = () => {
                 >
                   <Image
                     alt="Cerrar Sesión"
-                    src={reservaciones}
+                    src={"/reservaciones.png"}
                     width={25}
                     height={25}
                     className="text-2x1 text-white group-hover:text-blue-900"
@@ -69,7 +65,7 @@ const SideNavbar = () => {
 
                   <Image
                     alt="Cerrar Sesión"
-                    src={cotizacion}
+                    src={"/cotizacion.png"}
                     width={25}
                     height={25}
                     className="text-2x1 text-white group-hover:text-blue-900"
@@ -91,7 +87,7 @@ const SideNavbar = () => {
                     {/* need icons */}
                     <Image
                       alt="Cerrar Sesión"
-                      src={dolar}
+                      src={"/dolar.png"}
                       width={25}
                       height={25}
                       className="text-2x1 text-white group-hover:text-blue-900"
@@ -136,7 +132,7 @@ const SideNavbar = () => {
                   {/* need icons */}
                   <Image
                     alt="Cerrar Sesión"
-                    src={cerrarSesion}
+                    src={"/cerrarSesion.png"}
                     width={25}
                     height={25}
                     className="text-2x1 text-white group-hover:text-blue-900"

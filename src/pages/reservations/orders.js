@@ -1,25 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
-import data from "../../utils/dummy/dummyOrders.json";
 import Layout from "@/components/layout";
 import Popup from "@/components/Popup";
-import NewOrder from "./newOrder";
 import OrderInfo from "./orderInfo";
-import AddFiles from "./addFiles";
-import { IconButton, UploadFileIcon } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import AppContext from "@/components/AppContext";
 import Loading from "@/components/Loading";
 import Image from "next/image";
-import adjuntar from "../../img/adjuntar.png";
-import datosContacto from "../../img/datosContacto.png";
-import fichaPago from "../../img/fichaPago.png";
-import paquete from "../../img/paquete.png";
-import terminos from "../../img/terminosyCondiciones.png";
-import Euro from "./euro";
-import { configHeaders } from "../../utils/dummy/ClientConfig";
 import { Configs } from "@/Config";
 
 const Orders = () => {
@@ -158,7 +147,7 @@ const Orders = () => {
             >
               <Image
                 alt="Adjuntar archivos"
-                src={adjuntar}
+                src={"/adjuntar.png"}
                 width={35}
                 height={35}
                 title="Adjuntar archivos"
@@ -181,7 +170,7 @@ const Orders = () => {
           >
             <Image
               alt="Datos de Contacto"
-              src={datosContacto}
+              src={"/datosContacto.png"}
               width={35}
               height={35}
               title="Datos de Contacto"
@@ -208,7 +197,7 @@ const Orders = () => {
             >
               <Image
                 alt="Ficha de Pago"
-                src={fichaPago}
+                src={"/fichaPago.png"}
                 width={35}
                 height={35}
                 title="Ficha de Pago"
@@ -236,7 +225,7 @@ const Orders = () => {
             >
               <Image
                 alt="Paquete"
-                src={paquete}
+                src={"/paquete.png"}
                 width={35}
                 height={35}
                 title="Paquete"
@@ -264,7 +253,7 @@ const Orders = () => {
             >
               <Image
                 alt="Terminos Y Condiciones"
-                src={terminos}
+                src={"/terminosyCondiciones.png"}
                 width={35}
                 height={35}
                 title="Terminos Y Condiciones"

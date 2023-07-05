@@ -1,11 +1,9 @@
 import React, { useState, createContext, useContext } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -13,8 +11,6 @@ import AppContext from "@/components/AppContext";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
-import logo_vb from "../img/logo_vb_blanco.png";
-import priceShoes from "../img/priceShoesLogo.png";
 import Image from "next/image";
 import axios from "axios";
 import { Configs } from "@/Config";
@@ -155,7 +151,12 @@ export default function SignIn() {
       <header>
         <div className=" flex justify-between items-center p-4">
           <div className="container flex flex-col items-end justify-center ">
-            <Image alt="Bumeran" src={priceShoes} width={200} height={60} />
+            <Image
+              alt="Bumeran"
+              src={"/priceShoesLogo.png"}
+              width={200}
+              height={60}
+            />
           </div>
         </div>
       </header>
@@ -221,7 +222,7 @@ export default function SignIn() {
             <div className=" width: 100%  p-5 bg-center bg-cover ml-60 flex flex-col items-end justify-center ">
               <Image
                 alt="Adjuntar archivos"
-                src={logo_vb}
+                src={"/logo_vb_blanco.png"}
                 width={100}
                 height={100}
               />

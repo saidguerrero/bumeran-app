@@ -1,5 +1,4 @@
 import React from "react";
-import spinn from "../img/spinner.svg";
 
 import Image from "next/image";
 
@@ -11,7 +10,9 @@ export default function Loading() {
         <Image
           alt="Imagen Loading"
           className="blockUIConfL loading-imgL"
-          src={spinn}
+          src={"/spinner.svg"}
+          width={100}
+          height={100}
         />
       </div>
     </div>
