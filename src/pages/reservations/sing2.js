@@ -14,8 +14,6 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-// import fondo from "../img/playa.jpeg";
-import background from "../img/playa.jpeg";
 
 function Copyright(props) {
   return (

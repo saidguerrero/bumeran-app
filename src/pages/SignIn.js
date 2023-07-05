@@ -13,8 +13,6 @@ import AppContext from "@/components/AppContext";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Grid from "@mui/material/Grid";
-// import fondo from "../img/playa.jpeg";
-import background from "../img/playa.jpeg";
 import logo_vb from "../img/logo_vb_blanco.png";
 import priceShoes from "../img/priceShoesLogo.png";
 import Image from "next/image";
