@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React, { useContext } from "react";
 import AppContext from "@/components/AppContext";
-import priceShoesLogo from "/priceShoesLogo.png";
 
 export default function Header() {
   const context = useContext(AppContext);
@@ -12,11 +11,21 @@ export default function Header() {
           {" "}
           <td>
             {" "}
-            <Image alt="Bumeran" src={priceShoesLogo} width={100} height={30} />
+            <Image
+              alt="Bumeran"
+              src={"/priceShoesLogo.png"}
+              width={100}
+              height={30}
+            />
           </td>
         </tr>
       </table>
-      <Image alt="Bumeran" src={priceShoesLogo} width={100} height={30} />
+      <Image
+        alt="Bumeran"
+        src={"/priceShoesLogo.png"}
+        width={100}
+        height={30}
+      />
       <div className="container flex flex-col items-center justify-center ">
         <nav>
           <div>
