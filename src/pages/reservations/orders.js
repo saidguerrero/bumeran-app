@@ -10,6 +10,8 @@ import AppContext from "@/components/AppContext";
 import Loading from "@/components/Loading";
 import Image from "next/image";
 import { Configs } from "@/Config";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 
 const Orders = () => {
   const context = useContext(AppContext);
@@ -24,6 +26,7 @@ const Orders = () => {
   const [emergencyContact, setEmergencyContact] = useState("");
   const [dolar, setDolar] = useState(0);
   const [euro, setEuro] = useState(0);
+  const [search, setSearch] = useState("");
 
   const openModal = async (e, value) => {
     e.preventDefault();
@@ -44,25 +47,61 @@ const Orders = () => {
     router.push("/reservations/addFiles");
   };
 
+  const handleSearch = async (e) => {
+    console.log("handleSearch");
+    if (search !== undefined) {
+      if (search?.length > 4) {
+        const idUser = role === "Administrador" ? 0 : context.userId;
+        const response = await axios.get(
+          url +
+            `/orders/pageOrders?search=${search}&id=${idUser}&page=1&size=10`,
+          {
+            headers: {
+              Authorization: ` ${localStorage.token}`,
+            },
+          }
+        );
+
+        const items = response.data;
+        // console.log(items.result);
+        const data = items.result.data[0].orders;
+        // console.log(data);
+        setOrders(data);
+      }
+    }
+  };
+
   const configs = new Configs();
   const url = configs.current.URL_WS_TRAVEL_API;
 
   const fetchOrders = async () => {
     context.setLoading(true);
     try {
-      const response = await axios.get(url + `/orders`, {
-        headers: {
-          Authorization: ` ${localStorage.token}`,
-        },
-      });
+      const idUser = role === "Administrador" ? 0 : context.userId;
+      const response = await axios.get(
+        url + `/orders/pageOrders?id=${idUser}&page=1&size=50`,
+        {
+          headers: {
+            Authorization: ` ${localStorage.token}`,
+          },
+        }
+      );
+      // const response = await axios.get(url + `/orders`, {
+      //   headers: {
+      //     Authorization: ` ${localStorage.token}`,
+      //   },
+      // });
       console.log("********* Orders **********");
-      const items = response.data;
 
       // ***** dummy data
       // const items = data;
 
-      console.log(items);
-      setOrders(items.result.orders);
+      // console.log(items);
+      const items = response.data;
+      // console.log(items.result);
+      const data = items.result.data[0].orders;
+      // console.log(data);
+      setOrders(data);
       setDolar(items.result.dollar);
       setEuro(items.result.euro);
       // setOrders(response.result);
@@ -73,12 +112,14 @@ const Orders = () => {
     }
     context.setLoading(false);
   };
-
+  const [role, setRole] = useState("");
+  const [userId, setUserId] = useState(0);
   useEffect(() => {
-    console.log("useEffect Orders");
-    console.log(context.role);
-    console.log(context.branch);
-    console.log(context.city);
+    // console.log("useEffect Orders");
+    // console.log(context.role);
+    // console.log(context.branch);
+    // console.log(context.city);
+    setRole(localStorage.getItem("role"));
 
     context.setLoading(false);
     fetchOrders();
@@ -279,6 +320,28 @@ const Orders = () => {
           </h4>
           <br />
         </div>
+        <div className="  pl-80 ">
+          <TextField
+            margin="normal"
+            required
+            id="search"
+            placeholder="Buscar por Localizador o Nombre"
+            name="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            autoFocus
+            className="w-96"
+          />
+          {search?.length > 4 ? (
+            <button
+              onClick={(e) => handleSearch(e)}
+              className="ml-10 rounded-md bg-blue-900 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Buscar
+            </button>
+          ) : null}
+        </div>
+
         <main className=" flex pl-60 pr-5 py-1">
           <div style={{ height: 600, width: "100%" }}>
             <DataGrid

@@ -21,6 +21,8 @@ import Swal from "sweetalert2";
 import AppContext from "@/components/AppContext";
 import Loading from "@/components/Loading";
 import { Configs } from "@/Config";
+import IconButton from "@mui/material/IconButton";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -55,6 +57,7 @@ export default function NewOrder() {
     cityId: 0,
     branchId: 0,
     salesPersonId: 0,
+    exchange: "MXN",
   });
   const [suppliers, setSuppliers] = useState([]);
   const [cities, setCities] = useState([]);
@@ -65,19 +68,19 @@ export default function NewOrder() {
   const url = configs.current.URL_WS_TRAVEL_API;
 
   const fetchSuppliers = async () => {
-    console.log("********* entro sup **********");
-    console.log(url);
+    // console.log("********* entro sup **********");
+    // console.log(url);
     //add header authorization token
     const response = await axios.get(url + `/supplier`, {
       headers: {
         Authorization: ` ${localStorage.token}`,
       },
     });
-    console.log("********* supplier **********");
+    // console.log("********* supplier **********");
     const items = response.data;
     // traer valor dummy
     // const items = data;
-    console.log(items);
+    // console.log(items);
 
     setSuppliers(items.result);
   };
@@ -91,7 +94,7 @@ export default function NewOrder() {
       });
 
       const items = response.data;
-      console.log(items);
+      // console.log(items);
       setBranches(items.result.branches);
       setCities(items.result.cities);
       setSalesPersons(items.result.salesPersons);
@@ -146,15 +149,15 @@ export default function NewOrder() {
 
       setFiles64(arrayFiles64);
     }
-    console.log("arrayFiles64");
-    console.log(arrayFiles64);
-    console.log(files64);
+    // console.log("arrayFiles64");
+    // console.log(arrayFiles64);
+    // console.log(files64);
   };
 
   const handleChange = (e) => {
     const value = e.target.value;
-    console.log(value);
-    console.log(e.target.name);
+    // console.log(value);
+    // console.log(e.target.name);
     setOrder({ ...order, [e.target.name]: value });
   };
 
@@ -178,9 +181,9 @@ export default function NewOrder() {
   //fetch data from backend with axios
   const fetchData = async (e) => {
     e.preventDefault();
-    console.log("******* file *********");
+    // console.log("******* file *********");
     let fileName = "magni.pdf";
-    console.log(fileName);
+    // console.log(fileName);
     context.setLoading(true);
     // const response = await axios.get(
     //  url + `upload/readTest/${fileName}`
@@ -192,7 +195,7 @@ export default function NewOrder() {
           Authorization: ` ${localStorage.token}`,
         },
       });
-      console.log(response);
+      // console.log(response);
       const data = await response.data.result;
       context.setLoading(false);
       setOrder({
@@ -222,8 +225,8 @@ export default function NewOrder() {
 
   const saveOrder = async (e) => {
     e.preventDefault();
-    console.log("******* order *********");
-    console.log(order);
+    // console.log("******* order *********");
+    // console.log(order);
 
     if (
       !order.amount ||
@@ -311,7 +314,7 @@ export default function NewOrder() {
       })
       .catch((response) => console.log(333, response));
 
-    // reset(e);
+    reset(e);
 
     router.push("/reservations/orders");
     context.setLoading(false);
@@ -333,6 +336,11 @@ export default function NewOrder() {
       contactEmail: "",
       emergencyContactPhone: "",
       emergencyContact: "",
+      supplierId: 0,
+      cityId: 0,
+      branchId: 0,
+      salesPersonId: 0,
+      exchange: "MXN",
     });
   };
 
@@ -391,6 +399,7 @@ export default function NewOrder() {
                       autoComplete="amount"
                     />
                   </Grid>
+
                   <Grid item xs={6}>
                     <TextField
                       margin="normal"
@@ -464,6 +473,22 @@ export default function NewOrder() {
                       value={order.emergencyContactPhone}
                       onChange={(e) => handleChange(e)}
                     />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl sx={{ width: 300 }}>
+                      <InputLabel>Moneda</InputLabel>
+                      <Select
+                        id="exchange"
+                        name="exchange"
+                        value={order.exchange}
+                        onChange={(e) => handleChange(e)}
+                        label="exchange"
+                      >
+                        <MenuItem value="MXN">Pesos</MenuItem>
+                        <MenuItem value="USD">Dolares</MenuItem>
+                        <MenuItem value="EUR">Euros</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
                   <Grid item xs={6}>
                     <FormControl sx={{ width: 300 }}>
@@ -547,11 +572,12 @@ export default function NewOrder() {
                       </Select>
                     </FormControl>
                   </Grid>
+                  <Grid item xs={6} />
+
                   <Grid item xs={6}>
-                    <TextField
-                      margin="normal"
+                    <input
+                      accept="application/pdf"
                       type="file"
-                      fullWidth
                       id="uploadFile"
                       name="uploadFile"
                       onChange={(e) => handleUploadfile(e)}

@@ -9,6 +9,6 @@ const PROD_VARS = {
 
 export class Configs {
   constructor() {
-    this.current = PROD_VARS;
+    this.current = DEV_VARS;
   }
 }
