@@ -318,7 +318,6 @@ const Orders = () => {
           <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
             1 EUR = {euro} MXN
           </h4>
-          <br />
         </div>
         <div className="  pl-80 ">
           <TextField

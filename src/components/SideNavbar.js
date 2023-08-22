@@ -86,7 +86,7 @@ const SideNavbar = () => {
                   >
                     {/* need icons */}
                     <Image
-                      alt="Cerrar Sesión"
+                      alt="dolar"
                       src={"/dolar.png"}
                       width={25}
                       height={25}
@@ -107,8 +107,8 @@ const SideNavbar = () => {
                   >
                     {/* need icons */}
                     <Image
-                      alt="Cerrar Sesión"
-                      src={dolar}
+                      alt="euro"
+                      src={"/dolar.png"}
                       width={25}
                       height={25}
                       className="text-2x1 text-white group-hover:text-blue-900"

@@ -210,6 +210,7 @@ export default function NewOrder() {
         salesPerson: data.salesPerson,
         contactPhoneNum: data.contactPhoneNum,
         contactEmail: data.contactEmail,
+        exchange: "MXN",
       });
       context.setLoading(false);
     } catch (error) {

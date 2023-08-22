@@ -4,11 +4,11 @@ const DEV_VARS = {
 
 const PROD_VARS = {
   URL_WS_TRAVEL_API:
-    "https://racial-letter-production.up.railway.app/travelagency/api/v1",
+    "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/api/v1",
 };
 
 export class Configs {
   constructor() {
-    this.current = DEV_VARS;
+    this.current = PROD_VARS;
   }
 }
