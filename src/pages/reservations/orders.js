@@ -54,7 +54,7 @@ const Orders = () => {
         const idUser = role === "Administrador" ? 0 : context.userId;
         const response = await axios.get(
           url +
-            `/orders/pageOrders?search=${search}&id=${idUser}&page=1&size=10`,
+            `/orders/pageOrders?search=${search}&id=${idUser}&page=1&size=100&roleId=${context.roleId}`,
           {
             headers: {
               Authorization: ` ${localStorage.token}`,
@@ -77,9 +77,14 @@ const Orders = () => {
   const fetchOrders = async () => {
     context.setLoading(true);
     try {
-      const idUser = role === "Administrador" ? 0 : context.userId;
+      // console.log("fetchOrders");
+      // console.log(role);
+      // console.log(context.userId);
+      // console.log(context.roleId);
+      // const idUser = role === "Administrador" ? 0 : context.userId;
       const response = await axios.get(
-        url + `/orders/pageOrders?id=${idUser}&page=1&size=50`,
+        url +
+          `/orders/pageOrders?id=${context.userId}&page=1&size=100&roleId=${context.roleId}`,
         {
           headers: {
             Authorization: ` ${localStorage.token}`,
@@ -99,11 +104,12 @@ const Orders = () => {
       // console.log(items);
       const items = response.data;
       // console.log(items.result);
-      const data = items.result.data[0].orders;
+      // console.log(items.result.data);
+      const data = items.result.data[0];
       // console.log(data);
-      setOrders(data);
-      setDolar(items.result.dollar);
-      setEuro(items.result.euro);
+      setOrders(data.orders);
+      setDolar(data.dollar);
+      setEuro(data.euro);
       // setOrders(response.result);
       // console.log("orders**************");
       console.log(items.result.dollar);
