@@ -38,8 +38,9 @@ export default function SignIn() {
 
   const configs = new Configs();
   // const url = configs.current.URL_WS_TRAVEL_API;
-  const url =
-    "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/api/v1";
+  // const url =
+  //   "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency";
+  const url = "https://racial-letter-production.up.railway.app//travelagency";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -64,7 +65,8 @@ export default function SignIn() {
     try {
       await axios
         .post(
-          "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/login",
+          // "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/login",
+          url + `/login`,
           // "http://localhost:9081/travelagency/login",
           data
         )
@@ -86,11 +88,14 @@ export default function SignIn() {
           });
         });
 
-      const userData = await axios.get(url + `/user/byUsername/` + username, {
-        headers: {
-          Authorization: ` ${token}`,
-        },
-      });
+      const userData = await axios.get(
+        url + `/api/v1/user/byUsername/` + username,
+        {
+          headers: {
+            Authorization: ` ${token}`,
+          },
+        }
+      );
       console.log("*************** userData ***************");
       console.log(userData);
       console.log(userData.data.result.fullName);
