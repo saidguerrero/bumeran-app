@@ -9,7 +9,7 @@ const PROD_AWS_VARS = {
 
 const PROD_RAILAPP_VARS = {
   URL_WS_TRAVEL_API:
-    "https://racial-letter-production.up.railway.app//travelagency/api/v1",
+    "https://racial-letter-production.up.railway.app/travelagency/api/v1",
 };
 
 export class Configs {

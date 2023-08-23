@@ -40,7 +40,7 @@ export default function SignIn() {
   // const url = configs.current.URL_WS_TRAVEL_API;
   // const url =
   //   "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency";
-  const url = "https://racial-letter-production.up.railway.app//travelagency";
+  const url = "https://racial-letter-production.up.railway.app/travelagency";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
