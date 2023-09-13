@@ -154,6 +154,7 @@ const Orders = () => {
 
     // console.log("useEffect Orders");
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));

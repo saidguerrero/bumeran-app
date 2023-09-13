@@ -60,6 +60,7 @@ export default function Dolar() {
     }
 
     fetchDolar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const save = async (e) => {

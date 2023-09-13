@@ -21,6 +21,7 @@ export default function Header() {
     setRole(dataDecrypt(sessionStorage.getItem("role")));
     setUserFullName(dataDecrypt(sessionStorage.getItem("userFullName")));
     setCurrentDate(sessionStorage.getItem("currentDate"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <header>

@@ -128,6 +128,7 @@ export default function NewOrder() {
     setLoading(true);
     setRole(dataDecrypt(sessionStorage.getItem("role")));
     fetchItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [files64, setFiles64] = useState("");
