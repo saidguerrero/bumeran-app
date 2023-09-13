@@ -53,6 +53,13 @@ export default function AddFiles(props) {
     },
   ];
 
+  const [customerFullname, setCustomerFullname] = useState("");
+  const [reservationNumber, setReservationNumber] = useState("");
+  useEffect(() => {
+    setCustomerFullname(sessionStorage.getItem("customerFullname"));
+    setReservationNumber(sessionStorage.getItem("reservationNumber"));
+  }, []);
+
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -228,10 +235,10 @@ export default function AddFiles(props) {
               <br />
               <br />
               <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
-                Nombre del cliente: {sessionStorage.getItem("customerFullname")}
+                Nombre del cliente: {customerFullname}
               </h4>
               <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
-                Reservación: {sessionStorage.getItem("reservationNumber")}
+                Reservación: {reservationNumber}
               </h4>
             </div>
             <CssBaseline />
