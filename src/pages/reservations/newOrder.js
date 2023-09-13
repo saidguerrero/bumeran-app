@@ -23,6 +23,7 @@ import Loading from "@/components/Loading";
 import { Configs } from "@/Config";
 import IconButton from "@mui/material/IconButton";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -37,6 +38,7 @@ const theme = createTheme();
 export default function NewOrder() {
   const context = useContext(AppContext);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [flag, setFlag] = useState(false);
   const [order, setOrder] = useState({
@@ -73,7 +75,7 @@ export default function NewOrder() {
     //add header authorization token
     const response = await axios.get(url + `/supplier`, {
       headers: {
-        Authorization: ` ${localStorage.token}`,
+        Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
       },
     });
     // console.log("********* supplier **********");
@@ -89,7 +91,7 @@ export default function NewOrder() {
     try {
       const response = await axios.get(url + `/orders/items`, {
         headers: {
-          Authorization: ` ${localStorage.token}`,
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
         },
       });
 
@@ -99,7 +101,9 @@ export default function NewOrder() {
       setCities(items.result.cities);
       setSalesPersons(items.result.salesPersons);
       setSuppliers(items.result.suppliers);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
       Swal.fire({
         icon: "error",
@@ -112,14 +116,17 @@ export default function NewOrder() {
   const fetchSalesPersons = async () => {
     const response = await axios.get(url + `/user/salesPerson`, {
       headers: {
-        Authorization: ` ${localStorage.token}`,
+        Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
       },
     });
     const items = response.data;
     setSalesPersons(items.result);
   };
 
+  const [role, setRole] = useState("");
   useEffect(() => {
+    setLoading(true);
+    setRole(dataDecrypt(sessionStorage.getItem("role")));
     fetchItems();
   }, []);
 
@@ -170,7 +177,7 @@ export default function NewOrder() {
     })
       .then((response) => {
         // Manejar la respuesta del servidor
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         // Manejar el error
@@ -184,7 +191,7 @@ export default function NewOrder() {
     // console.log("******* file *********");
     let fileName = "magni.pdf";
     // console.log(fileName);
-    context.setLoading(true);
+    setLoading(true);
     // const response = await axios.get(
     //  url + `upload/readTest/${fileName}`
     // );
@@ -192,12 +199,12 @@ export default function NewOrder() {
     try {
       const response = await axios.post(url + `/upload/readQuotePDF`, files64, {
         headers: {
-          Authorization: ` ${localStorage.token}`,
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
         },
       });
       // console.log(response);
       const data = await response.data.result;
-      context.setLoading(false);
+      setLoading(false);
       setOrder({
         id: data.id,
         fullName: data.fullName,
@@ -212,10 +219,10 @@ export default function NewOrder() {
         contactEmail: data.contactEmail,
         exchange: "MXN",
       });
-      context.setLoading(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      context.setLoading(false);
+      setLoading(false);
       Swal.fire({
         icon: "error",
         title: "Error en validación",
@@ -227,7 +234,13 @@ export default function NewOrder() {
   const saveOrder = async (e) => {
     e.preventDefault();
     // console.log("******* order *********");
-    // console.log(order);
+    console.log(role);
+
+    // console.log("userId = " + sessionStorage.getItem("userId"));
+
+    if (role === "Vendedor") {
+      order.salesPersonId = sessionStorage.getItem("userId");
+    }
 
     if (
       !order.amount ||
@@ -270,19 +283,20 @@ export default function NewOrder() {
       });
       return;
     }
-    context.setLoading(true);
+
+    setLoading(true);
 
     const check = await axios.get(
       url + `/orders/checkReservation/${order.reservationNumber}`,
       {
         headers: {
-          Authorization: ` ${localStorage.token}`,
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
         },
       }
     );
 
     if (check.data.result) {
-      context.setLoading(false);
+      setLoading(false);
       Swal.fire({
         icon: "error",
         title: "Número de reservación",
@@ -300,7 +314,7 @@ export default function NewOrder() {
         {
           responseType: "blob",
           headers: {
-            Authorization: ` ${localStorage.token}`,
+            Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
           },
         }
       )
@@ -318,7 +332,7 @@ export default function NewOrder() {
     reset(e);
 
     router.push("/reservations/orders");
-    context.setLoading(false);
+    setLoading(false);
   };
 
   const reset = (e) => {
@@ -348,7 +362,7 @@ export default function NewOrder() {
   return (
     <Layout title="Crear Cotización">
       <div className="bg-gray-200" style={{ height: 650, width: "100%" }}>
-        {context.loading ? <Loading /> : null}
+        {loading ? <Loading /> : null}
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="md">
             <CssBaseline />
@@ -556,21 +570,25 @@ export default function NewOrder() {
                   </Grid>
                   <Grid item xs={6}>
                     <FormControl sx={{ width: 300 }}>
-                      <InputLabel>Vendedor Price Shoes</InputLabel>
-                      <Select
-                        id="salesPersonId"
-                        name="salesPersonId"
-                        value={order.salesPersonId}
-                        onChange={(e) => handleChange(e)}
-                        label="Vendedor Price Shoes"
-                      >
-                        <MenuItem value=""></MenuItem>
-                        {salesPersons.map((sales) => (
-                          <MenuItem key={sales.userId} value={sales.userId}>
-                            {sales.fullName}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      {role === "Administrador" || role === "Root" ? (
+                        <div>
+                          <InputLabel>Vendedor Price Shoes</InputLabel>
+                          <Select
+                            id="salesPersonId"
+                            name="salesPersonId"
+                            value={order.salesPersonId}
+                            onChange={(e) => handleChange(e)}
+                            label="Vendedor Price Shoes"
+                          >
+                            <MenuItem value=""></MenuItem>
+                            {salesPersons.map((sales) => (
+                              <MenuItem key={sales.userId} value={sales.userId}>
+                                {sales.fullName}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </div>
+                      ) : null}
                     </FormControl>
                   </Grid>
                   <Grid item xs={6} />
@@ -601,6 +619,7 @@ export default function NewOrder() {
                     }
                   </Grid>
                 </Grid>
+
                 <button
                   onClick={(e) => reset(e)}
                   className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mr-5"

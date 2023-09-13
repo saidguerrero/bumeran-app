@@ -9,20 +9,25 @@ import Link from "next/link";
 import Image from "next/image";
 import AppContext from "./AppContext";
 import { useRouter } from "next/router";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 const SideNavbar = () => {
   const context = useContext(AppContext);
   const router = useRouter();
-  const openOrders = () => {
-    context.setLoading(true);
-  };
+  const openOrders = () => {};
 
   const [role, setRole] = useState("");
 
   useEffect(() => {
     // Perform localStorage action
-    setRole(localStorage.getItem("role"));
+
+    setRole(dataDecrypt(sessionStorage.getItem("role")));
   }, []);
+
+  const handleSessionClear = () => {
+    console.log("clear session");
+    sessionStorage.clear();
+  };
   return (
     <div>
       <Disclosure as="nav">
@@ -44,7 +49,7 @@ const SideNavbar = () => {
                 group cursor-pointer hover:shadow-lg m-auto"
                 >
                   <Image
-                    alt="Cerrar Sesión"
+                    alt="Ordenes"
                     src={"/reservaciones.png"}
                     width={25}
                     height={25}
@@ -64,7 +69,7 @@ const SideNavbar = () => {
                   {/* need icons */}
 
                   <Image
-                    alt="Cerrar Sesión"
+                    alt="Crear cotizacion"
                     src={"/cotizacion.png"}
                     width={25}
                     height={25}
@@ -124,7 +129,7 @@ const SideNavbar = () => {
             {/* logout */}
             <div className="my-4 w-full">
               {/* otro icono */}
-              <Link href="/">
+              <Link href="/" onClick={() => handleSessionClear()}>
                 <div
                   className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-white p-2 rounded-md 
                 group cursor-pointer hover:shadow-lg m-auto"

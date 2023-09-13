@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/system";
+import {
+  TablePagination,
+  tablePaginationClasses as classes,
+} from "@mui/base/TablePagination";
 import Layout from "@/components/layout";
 import Popup from "@/components/Popup";
 import OrderInfo from "./orderInfo";
@@ -12,6 +16,8 @@ import Image from "next/image";
 import { Configs } from "@/Config";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { data } from "autoprefixer";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 const Orders = () => {
   const context = useContext(AppContext);
@@ -27,6 +33,7 @@ const Orders = () => {
   const [dolar, setDolar] = useState(0);
   const [euro, setEuro] = useState(0);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const openModal = async (e, value) => {
     e.preventDefault();
@@ -40,24 +47,29 @@ const Orders = () => {
 
   const uploadFiles = async (e, row) => {
     e.preventDefault();
-    context.setLoading(true);
-    context.setOrderId(row.id);
-    context.setCustomerFullname(row.fullName);
-    context.setReservationNumber(row.reservationNumber);
+    setLoading(true);
+
+    sessionStorage.setItem("reservationNumber", row.reservationNumber);
+    sessionStorage.setItem("orderId", row.id);
+    sessionStorage.setItem("customerFullname", row.fullName);
+    setLoading(false);
     router.push("/reservations/addFiles");
   };
 
   const handleSearch = async (e) => {
-    console.log("handleSearch");
+    // console.log("handleSearch");
     if (search !== undefined) {
       if (search?.length > 4) {
-        const idUser = role === "Administrador" ? 0 : context.userId;
+        const idUser =
+          role === "Administrador" ? 0 : sessionStorage.getItem("userId");
+        const roleId = sessionStorage.getItem("roleId");
+        const token = dataDecrypt(sessionStorage.getItem("token"));
         const response = await axios.get(
           url +
-            `/orders/pageOrders?search=${search}&id=${idUser}&page=1&size=100&roleId=${context.roleId}`,
+            `/orders/pageOrders?search=${search}&id=${idUser}&page=1&size=100&roleId=${roleId}`,
           {
             headers: {
-              Authorization: ` ${localStorage.token}`,
+              Authorization: ` ${token}`,
             },
           }
         );
@@ -65,7 +77,7 @@ const Orders = () => {
         const items = response.data;
         // console.log(items.result);
         const data = items.result.data[0].orders;
-        // console.log(data);
+        // console.log(data[0]);
         setOrders(data);
       }
     }
@@ -75,19 +87,26 @@ const Orders = () => {
   const url = configs.current.URL_WS_TRAVEL_API;
 
   const fetchOrders = async () => {
-    context.setLoading(true);
+    setLoading(true);
     try {
       // console.log("fetchOrders");
       // console.log(role);
       // console.log(context.userId);
       // console.log(context.roleId);
       // const idUser = role === "Administrador" ? 0 : context.userId;
+      const idUser = sessionStorage.getItem("userId");
+      // console.log(idUser);
+      const roleId = sessionStorage.getItem("roleId");
+      // console.log(roleId);
+      const token = dataDecrypt(sessionStorage.getItem("token"));
+      // console.log(token);
+
       const response = await axios.get(
         url +
-          `/orders/pageOrders?id=${context.userId}&page=1&size=100&roleId=${context.roleId}`,
+          `/orders/pageOrders?id=${idUser}&page=1&size=100&roleId=${roleId}`,
         {
           headers: {
-            Authorization: ` ${localStorage.token}`,
+            Authorization: ` ${token}`,
           },
         }
       );
@@ -96,7 +115,7 @@ const Orders = () => {
       //     Authorization: ` ${localStorage.token}`,
       //   },
       // });
-      console.log("********* Orders **********");
+      // console.log("********* Orders **********");
 
       // ***** dummy data
       // const items = data;
@@ -112,11 +131,12 @@ const Orders = () => {
       setEuro(data.euro);
       // setOrders(response.result);
       // console.log("orders**************");
-      console.log(items.result.dollar);
+      // console.log(items.result.dollar);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
-    context.setLoading(false);
   };
   const [role, setRole] = useState("");
   const [userId, setUserId] = useState(0);
@@ -125,9 +145,14 @@ const Orders = () => {
     // console.log(context.role);
     // console.log(context.branch);
     // console.log(context.city);
-    setRole(localStorage.getItem("role"));
+    if (sessionStorage.getItem("token") === null) {
+      console.log("redirect ");
+      router.push("/");
+    }
+    setLoading(true);
+    setRole(dataDecrypt(sessionStorage.getItem("role")));
 
-    context.setLoading(false);
+    // console.log("useEffect Orders");
     fetchOrders();
   }, []);
 
@@ -135,15 +160,17 @@ const Orders = () => {
 
   const downloadFile = async (e, id, fileName) => {
     e.preventDefault();
-    console.log("id");
-    console.log(id);
-    context.setLoading(true);
+    setLoading(true);
+    // console.log("id");
+    // console.log(id);
+
+    const token = dataDecrypt(sessionStorage.getItem("token"));
 
     const response = axios
       .get(url + `/upload/${id}`, {
         responseType: "blob",
         headers: {
-          Authorization: ` ${localStorage.token}`,
+          Authorization: ` ${token}`,
         },
       })
       .then((response) => {
@@ -156,166 +183,157 @@ const Orders = () => {
         document.body.removeChild(link);
       })
       .catch((response) => console.log(333, response));
-    context.setLoading(false);
+
+    setLoading(false);
   };
 
-  const columns = [
-    {
-      field: "reservationNumber",
-      headerName: "Localizador",
-      width: 120,
-    },
-    {
-      field: "fullName",
-      headerName: "Nombre",
-      width: 200,
-    },
-    {
-      field: "amount",
-      headerName: "Precio",
-      width: 90,
-    },
-    {
-      field: "quoteStatus",
-      headerName: "Pago del Cliente",
-      width: 150,
-    },
-    { field: "paidStatus", headerName: " Pago VB", width: 110 },
-    {
-      field: "Adjuntar",
-      renderCell: (cellValues) => {
-        if (!cellValues.row.hasFiles) {
-          return (
-            <button
-              class="hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={(event) => {
-                uploadFiles(event, cellValues.row);
-              }}
-            >
-              <Image
-                alt="Adjuntar archivos"
-                src={"/adjuntar.png"}
-                width={35}
-                height={35}
-                title="Adjuntar archivos"
-              />
-            </button>
-          );
-        }
-      },
-    },
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    {
-      field: "Datos del Contacto",
-      renderCell: (cellValues) => {
-        return (
-          <button
-            class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-            onClick={(event) => {
-              openModal(event, cellValues.row);
-            }}
-          >
-            <Image
-              alt="Datos de Contacto"
-              src={"/datosContacto.png"}
-              width={35}
-              height={35}
-              title="Datos de Contacto"
-            />
-          </button>
-        );
-      },
-    },
-    {
-      field: "Ficha de Pago",
-      renderCell: (cellValues) => {
-        if (cellValues.row.hasFiles) {
-          return (
-            // si la propiedas hasFiles es falsa no se muestra el boton
-            <button
-              class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={(event) => {
-                downloadFile(
-                  event,
-                  cellValues.row.orderFileResponse.idPayOrder,
-                  "fichaPago"
-                );
-              }}
-            >
-              <Image
-                alt="Ficha de Pago"
-                src={"/fichaPago.png"}
-                width={35}
-                height={35}
-                title="Ficha de Pago"
-              />
-            </button>
-          );
-        }
-      },
-    },
-    {
-      field: "Paquete",
-      renderCell: (cellValues) => {
-        if (cellValues.row.hasFiles) {
-          return (
-            // si la propiedas hasFiles es falsa no se muestra el boton
-            <button
-              class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={(event) => {
-                downloadFile(
-                  event,
-                  cellValues.row.orderFileResponse.idGeneralData,
-                  "Paquete"
-                );
-              }}
-            >
-              <Image
-                alt="Paquete"
-                src={"/paquete.png"}
-                width={35}
-                height={35}
-                title="Paquete"
-              />
-            </button>
-          );
-        }
-      },
-    },
-    {
-      field: "TerminosYCondiciones",
-      renderCell: (cellValues) => {
-        if (cellValues.row.hasFiles) {
-          return (
-            // si la propiedas hasFiles es falsa no se muestra el boton
-            <button
-              class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-              onClick={(event) => {
-                downloadFile(
-                  event,
-                  cellValues.row.orderFileResponse.idTermsAndConditions,
-                  "TerminosYCondiciones"
-                );
-              }}
-            >
-              <Image
-                alt="Terminos Y Condiciones"
-                src={"/terminosyCondiciones.png"}
-                width={35}
-                height={35}
-                title="Terminos Y Condiciones"
-              />
-            </button>
-          );
-        }
-      },
-    },
-  ];
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const blue = {
+    50: "#F0F7FF",
+    200: "#A5D8FF",
+    400: "#3399FF",
+    900: "#003A75",
+  };
+
+  const grey = {
+    50: "#F3F6F9",
+    100: "#E7EBF0",
+    200: "#E0E3E7",
+    300: "#CDD2D7",
+    400: "#B2BAC2",
+    500: "#A0AAB4",
+    600: "#6F7E8C",
+    700: "#3E5060",
+    800: "#2D3843",
+    900: "#1A2027",
+  };
+
+  const Root = styled("div")(
+    ({ theme }) => `
+    table {
+      font-family: IBM Plex Sans, sans-serif;
+      font-size: 0.875rem;
+      border-collapse: collapse;
+      width: 100%;
+    }
+  
+    td,
+    th {
+      border: 1px solid ${
+        theme.palette.mode === "dark" ? grey[800] : grey[200]
+      };
+      text-align: left;
+      padding: 6px;
+    }
+  
+    th {
+      background-color: ${
+        theme.palette.mode === "dark" ? blue[900] : blue[200]
+      };
+    }
+    `
+  );
+
+  const CustomTablePagination = styled(TablePagination)(
+    ({ theme }) => `
+    & .${classes.spacer} {
+      display: none;
+    }
+  
+    & .${classes.toolbar}  {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+  
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  
+    & .${classes.selectLabel} {
+      margin: 0;
+    }
+  
+    & .${classes.select}{
+      padding: 2px;
+      border: 1px solid ${
+        theme.palette.mode === "dark" ? grey[800] : grey[200]
+      };
+      border-radius: 50px;
+      background-color: transparent;
+  
+      &:hover {
+        background-color: ${
+          theme.palette.mode === "dark" ? grey[800] : grey[50]
+        };
+      }
+  
+      &:focus {
+        outline: 1px solid ${
+          theme.palette.mode === "dark" ? blue[400] : blue[200]
+        };
+      }
+    }
+  
+    & .${classes.displayedRows} {
+      margin: 0;
+  
+      @media (min-width: 768px) {
+        margin-left: auto;
+      }
+    }
+  
+    & .${classes.actions} {
+      padding: 2px;
+      border: 1px solid ${
+        theme.palette.mode === "dark" ? grey[800] : grey[200]
+      };
+      border-radius: 50px;
+      text-align: center;
+    }
+  
+    & .${classes.actions} > button {
+      margin: 0 8px;
+      border: transparent;
+      border-radius: 2px;
+      background-color: transparent;
+  
+      &:hover {
+        background-color: ${
+          theme.palette.mode === "dark" ? grey[800] : grey[50]
+        };
+      }
+  
+      &:focus {
+        outline: 1px solid ${
+          theme.palette.mode === "dark" ? blue[400] : blue[200]
+        };
+      }
+    }
+    `
+  );
 
   return (
     <Layout title="Reservaciones">
       <div className="bg-gray-200">
-        {context.loading ? <Loading /> : null}
+        {loading ? <Loading /> : null}
         <div className="container flex flex-col items-end justify-center ">
           <br />
           <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
@@ -348,18 +366,187 @@ const Orders = () => {
         </div>
 
         <main className=" flex pl-60 pr-5 py-1">
-          <div style={{ height: 600, width: "100%" }}>
-            <DataGrid
-              rows={orders}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 10 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-            />
-          </div>
+          <Root sx={{ width: 1500, maxWidth: "100%" }}>
+            <table aria-label="custom pagination table">
+              <thead>
+                <tr>
+                  <th>Localizador</th>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Pago del Cliente</th>
+                  <th>Pago VB</th>
+                  <th>Adjuntar</th>
+
+                  <th>Datos del Contacto</th>
+                  <th>Ficha de Pago</th>
+                  <th>Paquete</th>
+                  <th>Terminos Y Condiciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(rowsPerPage > 0
+                  ? orders.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : orders
+                ).map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.reservationNumber}</td>
+                    <td style={{ width: 300 }} align="right">
+                      {row.fullName}
+                    </td>
+                    <td style={{ width: 150 }} align="right">
+                      {row.amount}
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {row.quoteStatus}
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {row.paidStatus}
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {!row.hasFiles ? (
+                        <button
+                          class="hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            uploadFiles(event, row);
+                          }}
+                        >
+                          <Image
+                            alt="Adjuntar archivos"
+                            src={"/adjuntar.png"}
+                            width={35}
+                            height={35}
+                            title="Adjuntar archivos"
+                          />
+                        </button>
+                      ) : null}
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {
+                        <button
+                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            openModal(event, row);
+                          }}
+                        >
+                          <Image
+                            alt="Datos de Contacto"
+                            src={"/datosContacto.png"}
+                            width={35}
+                            height={35}
+                            title="Datos de Contacto"
+                          />
+                        </button>
+                      }
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {row.hasFiles ? (
+                        <button
+                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            downloadFile(
+                              event,
+                              row.orderFileResponse.idPayOrder,
+                              "fichaPago"
+                            );
+                          }}
+                        >
+                          <Image
+                            alt="Ficha de Pago"
+                            src={"/fichaPago.png"}
+                            width={35}
+                            height={35}
+                            title="Ficha de Pago"
+                          />
+                        </button>
+                      ) : null}
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {row.hasFiles ? (
+                        <button
+                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            downloadFile(
+                              event,
+                              row.orderFileResponse.idGeneralData,
+                              "Paquete"
+                            );
+                          }}
+                        >
+                          <Image
+                            alt="Paquete"
+                            src={"/paquete.png"}
+                            width={35}
+                            height={35}
+                            title="Paquete"
+                          />
+                        </button>
+                      ) : null}
+                    </td>
+
+                    <td style={{ width: 120 }} align="right">
+                      {
+                        <button
+                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            downloadFile(
+                              event,
+                              row.orderFileResponse.idTermsAndConditions,
+                              "TerminosYCondiciones"
+                            );
+                          }}
+                        >
+                          <Image
+                            alt="Terminos Y Condiciones"
+                            src={"/terminosyCondiciones.png"}
+                            width={35}
+                            height={35}
+                            title="Terminos Y Condiciones"
+                          />
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                ))}
+
+                {emptyRows > 0 && (
+                  <tr style={{ height: 34 * emptyRows }}>
+                    <td colSpan={5} />
+                  </tr>
+                )}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <CustomTablePagination
+                    rowsPerPageOptions={[5]}
+                    colSpan={5}
+                    count={orders.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                      select: {
+                        "aria-label": "rows per page",
+                      },
+                      actions: {
+                        showFirstButton: true,
+                        showLastButton: true,
+                      },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </tr>
+              </tfoot>
+            </table>
+          </Root>
         </main>
         <Popup
           title="Datos Generales"

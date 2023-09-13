@@ -53,7 +53,6 @@ export default function OrderInfo(props) {
               >
                 <Grid item xs={6}>
                   <TextField
-                    disabled
                     margin="normal"
                     required
                     fullWidth
@@ -65,7 +64,6 @@ export default function OrderInfo(props) {
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    disabled
                     margin="normal"
                     required
                     fullWidth
@@ -88,7 +86,6 @@ export default function OrderInfo(props) {
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    disabled
                     margin="normal"
                     required
                     fullWidth

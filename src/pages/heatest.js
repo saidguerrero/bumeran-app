@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useContext } from "react";
 import AppContext from "@/components/AppContext";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 export default function Header() {
   const context = useContext(AppContext);
@@ -30,14 +31,14 @@ export default function Header() {
         <nav>
           <div>
             <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-              Módulo: {context.branch}
+              Módulo: {sessionStorage.getItem("branch")}
             </h3>
           </div>
         </nav>
         <nav>
           <div>
             <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-              Usuario: {context.userFullName}
+              Usuario: {dataDecrypt(sessionStorage.getItem("userFullName"))}
             </h3>
           </div>
         </nav>

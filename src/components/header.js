@@ -1,10 +1,27 @@
 import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import AppContext from "@/components/AppContext";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 export default function Header() {
   const context = useContext(AppContext);
+  const [role, setRole] = useState("");
+  const [branch, setBranch] = useState("");
+  const [userFullName, setUserFullName] = useState("");
+  const [city, setCity] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    // if (role != "Administrador" && role != "Root") {
+    //   router.push("/reservations/orders");
+    // }
+    setBranch(sessionStorage.getItem("branch"));
+    setCity(sessionStorage.getItem("city"));
+    setRole(dataDecrypt(sessionStorage.getItem("role")));
+    setUserFullName(dataDecrypt(sessionStorage.getItem("userFullName")));
+    setCurrentDate(sessionStorage.getItem("currentDate"));
+  }, []);
   return (
     <header>
       <div className=" flex justify-between items-center p-4">
@@ -21,7 +38,7 @@ export default function Header() {
           <nav>
             <div>
               <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-                Bienvenido {context.userFullName}
+                Bienvenido {userFullName}
               </h3>
             </div>
           </nav>
@@ -38,21 +55,21 @@ export default function Header() {
           <nav>
             <div>
               <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-                {context.currentDate}
+                {currentDate}
               </h3>
             </div>
           </nav>
           <nav>
             <div>
               <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-                Ciudad: {context.city ? context.city : "Admin"}
+                Ciudad: {city ? city : "Admin"}
               </h3>
             </div>
           </nav>
           <nav>
             <div>
               <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-                Módulo: {context.branch ? context.branch : "Admin"}
+                Módulo: {branch ? branch : "Admin"}
               </h3>
             </div>
           </nav>

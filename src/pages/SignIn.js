@@ -14,6 +14,7 @@ import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import axios from "axios";
 import { Configs } from "@/Config";
+import { dataEncrypt } from "@/utils/data-encrypt";
 
 function Copyright(props) {
   return (
@@ -44,6 +45,7 @@ export default function SignIn() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(true);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -62,32 +64,35 @@ export default function SignIn() {
       password,
     };
 
-    try {
-      await axios
-        .post(
-          // "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/login",
-          url + `/login`,
-          // "http://localhost:9081/travelagency/login",
-          data
-        )
-        .then((response) => {
-          token = response.headers.authorization;
+    await axios
+      .post(
+        // "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/login",
+        url + `/login`,
+        // "http://localhost:9081/travelagency/login",
+        data
+      )
+      .then((response) => {
+        token = response.data;
 
-          console.log("*************** token ***************");
-          console.log(token);
-          // Aquí puedes hacer lo que necesites con el token, como guardarlo en el estado de tu componente o en el localStorage
-        })
-        .catch((error) => {
-          // Manejo de errores
-          console.log("++++error");
-          console.log(error);
-          Swal.fire({
-            icon: "error",
-            title: "Error en al iniciar sesión",
-            text: "Error en al iniciar sesión, verifique sus credenciales",
-          });
+        // console.log("*************** token ***************");
+        // console.log(response);
+        // console.log(response.data);
+        // Aquí puedes hacer lo que necesites con el token, como guardarlo en el estado de tu componente o en el localStorage
+        setError(false);
+      })
+      .catch((error) => {
+        // Manejo de errores
+        // console.log("++++error");
+        // console.log(error);
+
+        Swal.fire({
+          icon: "error",
+          title: "Error en al iniciar sesión",
+          text: "Error en al iniciar sesión, verifique sus credenciales",
         });
-
+      });
+    console.log("error: " + error);
+    if (!error) {
       const userData = await axios.get(
         url + `/api/v1/user/byUsername/` + username,
         {
@@ -96,31 +101,26 @@ export default function SignIn() {
           },
         }
       );
-      console.log("*************** userData ***************");
-      console.log(userData);
-      console.log(userData.data.result.fullName);
-      localStorage.setItem("token", token);
-      console.log("login");
-      context.setLoading(true);
-      context.setUserFullName(userData.data.result.fullName);
-      context.setCity(userData.data.result.city);
-      context.setBranch(userData.data.result.branch);
-      context.setUserId(userData.data.result.userId);
-      context.setCurrentDate(userData.data.result.currentDate);
+      // console.log("*************** userData ***************");
 
-      context.setRole(userData.data.result.role);
-      context.setRoleId(userData.data.result.roleId);
-      localStorage.setItem("role", userData.data.result.role);
-      localStorage.setItem("userId", userData.data.result.userId);
+      // console.log(token);
+      // console.log(userData.data.result.fullName);
+      sessionStorage.setItem("token", dataEncrypt(token));
+      // console.log("login");
+      sessionStorage.setItem(
+        "userFullName",
+        dataEncrypt(userData.data.result.fullName)
+      );
+      sessionStorage.setItem("city", userData.data.result.city);
+      sessionStorage.setItem("branch", userData.data.result.branch);
+
+      sessionStorage.setItem("currentDate", userData.data.result.currentDate);
+      sessionStorage.setItem("role", dataEncrypt(userData.data.result.role));
+      sessionStorage.setItem("roleId", userData.data.result.roleId);
+      sessionStorage.setItem("userId", userData.data.result.userId);
+      // console.log("*************** llega a pageUrl ***************");
       let pageUrl = "/reservations/orders";
       router.push(pageUrl);
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Error en al iniciar sesión",
-        text: "Error en al iniciar sesión, verifique sus credenciales",
-      });
     }
 
     // if (

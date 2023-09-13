@@ -16,6 +16,10 @@ import axios from "axios";
 import AppContext from "@/components/AppContext";
 import Loading from "@/components/Loading";
 import { Configs } from "@/Config";
+import { dataDecrypt } from "@/utils/data-decrypt";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import { DataGrid } from "@mui/x-data-grid";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -34,10 +38,20 @@ export default function AddFiles(props) {
 
   const [loading, setLoading] = useState(false);
   const [orderFiles, setOrderFiles] = useState([]);
+  let filesToSave = [];
 
-  useEffect(() => {
-    context.setLoading(false);
-  }, []);
+  const columns = [
+    {
+      field: "name",
+      headerName: "Nombre del archivo",
+      width: 200,
+    },
+    {
+      field: "size",
+      headerName: "Tamaño",
+      width: 150,
+    },
+  ];
 
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -51,6 +65,7 @@ export default function AddFiles(props) {
 
   const handleFilePayOrder = async (event) => {
     event.preventDefault();
+    console.log("si entro a handleFilePayOrder");
     let allFiles = event?.target?.files?.length;
     let newFiles = [];
     let arrayFiles64 = [];
@@ -76,6 +91,16 @@ export default function AddFiles(props) {
         fileTypeId: 1,
       };
       orderFiles.push(uploadFiles);
+
+      // filesToSave.push({ id: 1, name: "Orden de pago", size: "1.2 MB" });
+
+      const temp = {
+        name: filePayOrder.name,
+        size: filePayOrder.size,
+      };
+      // filesToSave = [...filesToSave, temp];
+      // console.log("filesToSave");
+      // console.log(filesToSave);
     }
   };
 
@@ -106,6 +131,14 @@ export default function AddFiles(props) {
         fileTypeId: 2,
       };
       orderFiles.push(uploadFiles);
+
+      const temp = {
+        name: filePayOrder.name,
+        size: filePayOrder.size,
+      };
+      // filesToSave = [...filesToSave, temp];
+      // console.log("filesToSave");
+      // console.log(filesToSave);
     }
   };
 
@@ -144,9 +177,10 @@ export default function AddFiles(props) {
 
   const saveFiles = async (e) => {
     e.preventDefault();
-    console.log("******* order *********");
+    setLoading(true);
+    // console.log("******* order *********");
     // console.log(orderId);
-    console.log(orderFiles);
+    // console.log(orderFiles);
 
     if (!filePayOrder || !fileTerms || !fileTravelServices) {
       Swal.fire({
@@ -157,20 +191,20 @@ export default function AddFiles(props) {
       return;
     }
 
-    context.setLoading(true);
     const data = {
-      orderId: context.orderId,
+      orderId: sessionStorage.getItem("orderId"),
       uploadFiles: orderFiles,
     };
     const response = await axios.post(url + `/upload/aditional`, data, {
       headers: {
-        Authorization: ` ${localStorage.token}`,
+        Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
       },
     });
 
     console.log(response);
 
     resetFiles(e);
+    setLoading(false);
     router.push("/reservations/orders");
 
     // setOpenPopup(false);
@@ -186,7 +220,7 @@ export default function AddFiles(props) {
 
   return (
     <Layout title="Adjuntar archivo">
-      {context.loading ? <Loading /> : null}
+      {loading ? <Loading /> : null}
       <div className="bg-gray-200" style={{ height: 650 }}>
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="md">
@@ -194,10 +228,10 @@ export default function AddFiles(props) {
               <br />
               <br />
               <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
-                Nombre del cliente: {context.customerFullname}
+                Nombre del cliente: {sessionStorage.getItem("customerFullname")}
               </h4>
               <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
-                Reservación: {context.reservationNumber}
+                Reservación: {sessionStorage.getItem("reservationNumber")}
               </h4>
             </div>
             <CssBaseline />
@@ -222,69 +256,104 @@ export default function AddFiles(props) {
                   columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   <Grid item xs={6}>
-                    <TextField
-                      margin="normal"
-                      type="file"
-                      fullWidth
-                      id="filePayOrder"
-                      name="filePayOrder"
-                      onChange={(e) => handleFilePayOrder(e)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <button
-                      className="mt-7 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                      onClick={(event) => {
-                        handleFilePayOrder(event);
-                      }}
-                    >
+                    <Button variant="contained" component="label">
                       Adjuntar orden de pago
-                    </button>
+                      <input
+                        hidden
+                        accept="application/pdf"
+                        type="file"
+                        id="filePayOrder"
+                        name="filePayOrder"
+                        onChange={(e) => handleFilePayOrder(e)}
+                      />
+                    </Button>
                   </Grid>
                   <Grid item xs={6}>
-                    <TextField
-                      margin="normal"
-                      type="file"
-                      fullWidth
-                      id="fileTravelServices"
-                      name="fileTravelServices"
-                      onChange={(e) => handleFileTravelServices(e)}
-                    />
+                    <Fab
+                      color="secondary"
+                      size="small"
+                      component="span"
+                      aria-label="add1"
+                      variant="extended"
+                      id="btnFilePayOrder"
+                    >
+                      <AddIcon
+                        onClick={(event) => {
+                          handleFilePayOrder(event);
+                        }}
+                      />{" "}
+                      Subir archivo
+                    </Fab>
+                  </Grid>
+                  <br />
+                  <Grid item xs={6}>
+                    <Button variant="contained" component="label">
+                      Adjuntar Confirmacion de servicios Turisticos
+                      <input
+                        hidden
+                        accept="application/pdf"
+                        type="file"
+                        id="fileTravelServices"
+                        name="fileTravelServices"
+                        onChange={(e) => handleFileTravelServices(e)}
+                      />
+                    </Button>
                   </Grid>
                   <Grid item xs={6}>
-                    <button
-                      className="mt-7 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                    <Fab
+                      color="secondary"
+                      size="small"
+                      component="span"
+                      aria-label="add2"
+                      variant="extended"
                       onClick={(event) => {
                         handleFileTravelServices(event);
                       }}
                     >
-                      Adjuntar Confirmacion de servicios Turisticos
-                    </button>
+                      <AddIcon
+                        onClick={(event) => {
+                          handleFileTravelServices(event);
+                        }}
+                      />{" "}
+                      Subir archivo
+                    </Fab>
                   </Grid>
+                  <br />
                   <Grid item xs={6}>
-                    <TextField
-                      margin="normal"
-                      type="file"
-                      fullWidth
-                      id="fileTerms"
-                      name="fileTerms"
-                      onChange={(e) => handleFileTermsAndConditions(e)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <button
-                      className="mt-7
-                    rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                      onClick={(event) => {
-                        handleFileTermsAndConditions(event);
-                      }}
-                    >
+                    <Button variant="contained" component="label">
                       Adjuntar terminos y condiciones firmados
-                    </button>
+                      <input
+                        hidden
+                        accept="application/pdf"
+                        type="file"
+                        id="fileTerms"
+                        name="fileTerms"
+                        onChange={(e) => handleFileTermsAndConditions(e)}
+                      />
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Fab
+                      color="secondary"
+                      size="small"
+                      component="span"
+                      aria-label="add"
+                      variant="extended"
+                    >
+                      <AddIcon
+                        onClick={(event) => {
+                          handleFileTermsAndConditions(event);
+                        }}
+                      />{" "}
+                      Subir archivo
+                    </Fab>
                   </Grid>
                 </Grid>
                 <br />
-
+                {/* <div style={{ height: 200, width: "60%" }}>
+                  <DataGrid rows={filesToSave} columns={columns} />
+                </div> */}
+                <br />
                 <button
                   onClick={resetFiles}
                   className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mr-5"
@@ -296,7 +365,7 @@ export default function AddFiles(props) {
                   onClick={saveFiles}
                   className="ml-5 rounded-md bg-blue-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Guardar
+                  Guardar archivos
                 </button>
               </Box>
             </Box>

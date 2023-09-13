@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import React, { useState, createContext, useEffect } from "react";
 import AppContext from "@/components/AppContext";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 export default function App({ Component, pageProps }) {
   const [userFullName, setUserFullName] = useState("");
@@ -18,7 +19,7 @@ export default function App({ Component, pageProps }) {
   const [roleId, setRoleId] = useState(0);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = dataDecrypt(sessionStorage.getItem("token"));
     if (token) {
       setToken(token);
       setIsLogged(true);

@@ -17,6 +17,7 @@ import AppContext from "@/components/AppContext";
 import Loading from "@/components/Loading";
 import axios from "axios";
 import { Configs } from "@/Config";
+import { dataDecrypt } from "@/utils/data-decrypt";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,6 +33,7 @@ export default function Dolar() {
   const context = useContext(AppContext);
   const router = useRouter();
   const [dolar, setDolar] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const configs = new Configs();
   const url = configs.current.URL_WS_TRAVEL_API;
@@ -39,20 +41,20 @@ export default function Dolar() {
   const fetchDolar = async () => {
     const response = await axios.get(url + `/currency/dollar`, {
       headers: {
-        Authorization: ` ${localStorage.token}`,
+        Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
       },
     });
-    console.log("********* Dolar **********");
+    // console.log("********* Dolar **********");
     const items = response.data;
     // traer valor dummy
     // const items = data;
-    console.log(items);
+    // console.log(items);
 
     setDolar(items.result);
   };
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
+    const role = dataDecrypt(sessionStorage.getItem("role"));
     if (role != "Administrador" && role != "Root") {
       router.push("/reservations/orders");
     }
@@ -62,30 +64,30 @@ export default function Dolar() {
 
   const save = async (e) => {
     e.preventDefault();
-    console.log("******* Dolar *********");
-    console.log(dolar);
-
+    // console.log("******* Dolar *********");
+    // console.log(dolar);
+    setLoading(true);
     if (!dolar) {
       Swal.fire({
         icon: "error",
         title: "Error en validación",
         text: "El valor del dolar no puede estar vacio",
       });
+      setLoading(false);
       return;
     }
 
-    context.setLoading(true);
     const data = {
       price: dolar,
-      userId: localStorage.userId,
+      userId: sessionStorage.getItem("userId"),
     };
 
     const response = await axios.post(url + `/currency/dollar`, data, {
       headers: {
-        Authorization: ` ${localStorage.token}`,
+        Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
       },
     });
-
+    setLoading(false);
     router.push("/reservations/orders");
   };
 
@@ -111,7 +113,7 @@ export default function Dolar() {
   return (
     <Layout title="Actualizar Precio Dolar">
       <div className="bg-gray-200 " style={{ height: 650 }}>
-        {context.loading ? <Loading /> : null}
+        {loading ? <Loading /> : null}
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="md">
             <CssBaseline />
