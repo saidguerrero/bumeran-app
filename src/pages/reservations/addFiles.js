@@ -101,10 +101,10 @@ export default function AddFiles(props) {
 
       // filesToSave.push({ id: 1, name: "Orden de pago", size: "1.2 MB" });
 
-      const temp = {
-        name: filePayOrder.name,
-        size: filePayOrder.size,
-      };
+      // const temp = {
+      //   name: filePayOrder.name,
+      //   size: filePayOrder.size,
+      // };
       // filesToSave = [...filesToSave, temp];
       // console.log("filesToSave");
       // console.log(filesToSave);
@@ -139,10 +139,10 @@ export default function AddFiles(props) {
       };
       orderFiles.push(uploadFiles);
 
-      const temp = {
-        name: filePayOrder.name,
-        size: filePayOrder.size,
-      };
+      // const temp = {
+      //   name: filePayOrder.name,
+      //   size: filePayOrder.size,
+      // };
       // filesToSave = [...filesToSave, temp];
       // console.log("filesToSave");
       // console.log(filesToSave);
@@ -263,97 +263,68 @@ export default function AddFiles(props) {
                   columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   <Grid item xs={6}>
-                    <Button variant="contained" component="label">
-                      Adjuntar orden de pago
-                      <input
-                        hidden
-                        accept="application/pdf"
-                        type="file"
-                        id="filePayOrder"
-                        name="filePayOrder"
-                        onChange={(e) => handleFilePayOrder(e)}
-                      />
-                    </Button>
+                    <TextField
+                      margin="normal"
+                      type="file"
+                      fullWidth
+                      id="filePayOrder"
+                      name="filePayOrder"
+                      onChange={(e) => handleFilePayOrder(e)}
+                    />
                   </Grid>
                   <Grid item xs={6}>
-                    <Fab
-                      color="secondary"
-                      size="small"
-                      component="span"
-                      aria-label="add1"
-                      variant="extended"
-                      id="btnFilePayOrder"
+                    <button
+                      className="mt-7 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                      onClick={(event) => {
+                        handleFilePayOrder(event);
+                      }}
                     >
-                      <AddIcon
-                        onClick={(event) => {
-                          handleFilePayOrder(event);
-                        }}
-                      />{" "}
-                      Subir archivo
-                    </Fab>
+                      Adjuntar orden de pago
+                    </button>
                   </Grid>
                   <br />
                   <Grid item xs={6}>
-                    <Button variant="contained" component="label">
-                      Adjuntar Confirmacion de servicios Turisticos
-                      <input
-                        hidden
-                        accept="application/pdf"
-                        type="file"
-                        id="fileTravelServices"
-                        name="fileTravelServices"
-                        onChange={(e) => handleFileTravelServices(e)}
-                      />
-                    </Button>
+                    <TextField
+                      margin="normal"
+                      type="file"
+                      fullWidth
+                      id="fileTravelServices"
+                      name="fileTravelServices"
+                      onChange={(e) => handleFileTravelServices(e)}
+                    />
                   </Grid>
                   <Grid item xs={6}>
-                    <Fab
-                      color="secondary"
-                      size="small"
-                      component="span"
-                      aria-label="add2"
-                      variant="extended"
+                    <button
+                      className="mt-7 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
                       onClick={(event) => {
                         handleFileTravelServices(event);
                       }}
                     >
-                      <AddIcon
-                        onClick={(event) => {
-                          handleFileTravelServices(event);
-                        }}
-                      />{" "}
-                      Subir archivo
-                    </Fab>
+                      Adjuntar datos generales
+                    </button>
                   </Grid>
                   <br />
                   <Grid item xs={6}>
-                    <Button variant="contained" component="label">
-                      Adjuntar terminos y condiciones firmados
-                      <input
-                        hidden
-                        accept="application/pdf"
-                        type="file"
-                        id="fileTerms"
-                        name="fileTerms"
-                        onChange={(e) => handleFileTermsAndConditions(e)}
-                      />
-                    </Button>
+                    <TextField
+                      margin="normal"
+                      type="file"
+                      fullWidth
+                      id="fileTerms"
+                      name="fileTerms"
+                      onChange={(e) => handleFileTermsAndConditions(e)}
+                    />
                   </Grid>
                   <Grid item xs={6}>
-                    <Fab
-                      color="secondary"
-                      size="small"
-                      component="span"
-                      aria-label="add"
-                      variant="extended"
+                    <button
+                      className="mt-7
+                    rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                      onClick={(event) => {
+                        handleFileTermsAndConditions(event);
+                      }}
                     >
-                      <AddIcon
-                        onClick={(event) => {
-                          handleFileTermsAndConditions(event);
-                        }}
-                      />{" "}
-                      Subir archivo
-                    </Fab>
+                      {" "}
+                      Adjuntar terminos y condiciones firmados
+                    </button>
                   </Grid>
                 </Grid>
                 <br />

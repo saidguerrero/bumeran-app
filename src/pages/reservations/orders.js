@@ -419,7 +419,7 @@ const Orders = () => {
                         >
                           <Image
                             alt="Adjuntar archivos"
-                            src={"/adjuntar.png"}
+                            src={"/Adjuntar.png"}
                             width={35}
                             height={35}
                             title="Adjuntar archivos"

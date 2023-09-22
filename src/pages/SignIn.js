@@ -38,10 +38,11 @@ export default function SignIn() {
   const context = useContext(AppContext);
 
   const configs = new Configs();
-  // const url = configs.current.URL_WS_TRAVEL_API;
-  // const url =
-  //   "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency";
-  const url = "https://racial-letter-production.up.railway.app/travelagency";
+
+  const url =
+    // "http://localhost:9081/travelagency"; //configs.current.URL_WS_TRAVEL_API;
+    // "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency";
+    "https://racial-letter-production.up.railway.app/travelagency";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -103,7 +104,7 @@ export default function SignIn() {
       );
       // console.log("*************** userData ***************");
 
-      // console.log(token);
+      console.log(token);
       // console.log(userData.data.result.fullName);
       sessionStorage.setItem("token", dataEncrypt(token));
       // console.log("login");
