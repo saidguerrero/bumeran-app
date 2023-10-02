@@ -601,6 +601,7 @@ export default function NewOrder() {
                       id="uploadFile"
                       name="uploadFile"
                       onChange={(e) => handleUploadfile(e)}
+                      multiple
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -618,6 +619,9 @@ export default function NewOrder() {
                         </Button>
                       ) : null
                     }
+                  </Grid>
+                  <Grid item xs={6}>
+                    <br />
                   </Grid>
                 </Grid>
 

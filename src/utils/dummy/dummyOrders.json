@@ -1,62 +1,71 @@
 {
   "status": "success",
   "code": "OK000",
-  "result":  {
-    "dollar" : "15.67",
-    "euro" : "18.67",
-   "orders" : [
-
-      {
-          "id": 666,
-          "quotationSheet": "0031",
-          "fullName": "CRUZ BETANZOS ANGEL",
-          "amount": "5,537.25",
-          "travelInfo": "MEX a HUX",
-          "supplier": "MAGNICHARTERS",
-          "reservationNumber": "WAD19134V35",
-          "city": "Estado de Mexico",
-          "branch": "ORIENTE",
-          "salesPerson": "Said Guerrero",
-          "orderDate": "03-05-2023",
-          "quoteStatus": "PENDIENTE",
-          "paidStatus": "PENDIENTE",
-          "contactPhoneNum": "5555566666",
-          "contactEmail": "said@said.com",
-          "emergencyContactPhone": "3344008912",
-          "hasFiles": false,
-          "orderFileResponse" : {
-            "idPayOrder" : 1,
-            "idGeneralData" : 2,
-            "idTermsAndConditions" : 3
-          }
-      },
-      {
-          "id":777,
-          "quotationSheet": "0032",
-          "fullName": "ANGEL CRUZ BETANZOS",
-          "amount": "22,851.98",
-          "travelInfo": "GRAN DEAL COZUMEL ¥",
-          "supplier": "EUROMUNDO",
-          "reservationNumber": "D44MJZ",
-          "city": "CDMX",
-          "branch": "NORTE",
-          "salesPerson": "Jorge Barron",
-          "orderDate": "03-05-2023",
-          "quoteStatus": "PENDIENTE",
-          "paidStatus": "PENDIENTE",
-          "contactPhoneNum": "8899007766",
-          "contactEmail": "cruz@gmail.com",
-          "emergencyContactPhone": "5534566677",
-          "hasFiles": true,
-          "orderFileResponse" : {
-            "idPayOrder" : 1,
-            "idGeneralData" : 2,
-            "idTermsAndConditions" : 3
-          }
-      }
-     
-    
-  ]},
+  "result": {
+    "pageNumber": 1,
+    "rowsOfPage": 100,
+    "total": 2,
+    "data": [
+        {
+            "orders": [
+                {
+                    "id": 32,
+                    "statusId": 4,
+                    "quotationSheet": "0032",
+                    "fullName": "Luis diaz",
+                    "amount": "5,537.25",
+                    "travelInfo": "MEX a HUX ",
+                    "supplier": "MAGNICHARTERS",
+                    "reservationNumber": "WAD19134V778-1",
+                    "city": "CDMX",
+                    "branch": "NORTE",
+                    "salesPerson": "Said Guerrero",
+                    "orderDate": "22-09-2023",
+                    "quoteStatus": "EXPIRADO",
+                    "paidStatus": "PENDIENTE",
+                    "contactPhoneNum": "5538953446",
+                    "contactEmail": "cruz@gmail.com",
+                    "emergencyContactPhone": "5538953447",
+                    "emergencyContact": "bruno diaz",
+                    "hasFiles": true,
+                    "orderFileResponse": {
+                        "idPayOrder": 43,
+                        "idGeneralData": 44,
+                        "idTermsAndConditions": 45
+                    }
+                },
+                {
+                    "id": 31,
+                    "statusId": 1,
+                    "quotationSheet": "0031",
+                    "fullName": "gerardo lucas",
+                    "amount": "12,077.52",
+                    "travelInfo": "VAMOS CON TODO A CANCUN ¥ ASC OK",
+                    "supplier": "EUROMUNDO",
+                    "reservationNumber": "PYBQC444-1",
+                    "city": " ESTADO DE MEXICO",
+                    "branch": "NORTE",
+                    "salesPerson": "Said Guerrero",
+                    "orderDate": "22-09-2023",
+                    "quoteStatus": "PENDIENTE",
+                    "paidStatus": "PENDIENTE",
+                    "contactPhoneNum": "5573823914",
+                    "contactEmail": "siviajemos@viajesbumeran.net",
+                    "emergencyContactPhone": "5573823917",
+                    "emergencyContact": "wendy lucas",
+                    "hasFiles": true,
+                    "orderFileResponse": {
+                        "idPayOrder": 40,
+                        "idGeneralData": 41,
+                        "idTermsAndConditions": 42
+                    }
+                }
+            ],
+            "dollar": "18.99",
+            "euro": "19.22"
+        }
+    ]
+},
   "httpCode": "OK",
   "error": null
 }

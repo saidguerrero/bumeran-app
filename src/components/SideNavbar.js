@@ -2,9 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import { Disclosure } from "@headlessui/react";
-import { MdOutlineSettings, MdOutlineLogout } from "react-icons/md";
-import { TbReportAnalytics } from "react-icons/tb";
-import { HiOutlineDatabase } from "react-icons/hi";
+
 import Link from "next/link";
 import Image from "next/image";
 import AppContext from "./AppContext";

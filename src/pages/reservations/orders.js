@@ -8,6 +8,7 @@ import {
 import Layout from "@/components/layout";
 import Popup from "@/components/Popup";
 import OrderInfo from "./orderInfo";
+import UpdateQuoteStatus from "./updateQuoteStatus";
 import { useRouter } from "next/router";
 import axios from "axios";
 import AppContext from "@/components/AppContext";
@@ -18,13 +19,13 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { data } from "autoprefixer";
 import { dataDecrypt } from "@/utils/data-decrypt";
+import Link from "next/link";
 
 const Orders = () => {
   const context = useContext(AppContext);
   const router = useRouter();
   const [orders, setOrders] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
-  const [openPopupUF, setOpenPopupUF] = useState(false);
 
   const [contactPhoneNum, setContactPhoneNum] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -35,6 +36,10 @@ const Orders = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [openStatusPopup, setOpenStatusPopup] = useState(false);
+  const [orderId, setOrderId] = useState(0);
+  const [statusId, setStatusId] = useState(0);
+
   const openModal = async (e, value) => {
     e.preventDefault();
 
@@ -43,6 +48,13 @@ const Orders = () => {
     setEmergencyContactPhone(value.emergencyContactPhone);
     setEmergencyContact(value.emergencyContact);
     setOpenPopup(true);
+  };
+
+  const openStatusModal = async (e, value) => {
+    e.preventDefault();
+    setOpenStatusPopup(true);
+    console.log(value);
+    setOrderId(value.id);
   };
 
   const uploadFiles = async (e, row) => {
@@ -156,6 +168,21 @@ const Orders = () => {
     fetchOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const updateTempOrder = async (e, id, statusId, status) => {
+    e.preventDefault();
+    // console.log("SI ENTRO !! updateTempOrder");
+    // console.log("status en updateTempOrder" + status);
+    //setLoading(true);
+    const objIndex = orders.findIndex((obj) => obj.id === id);
+    // console.log(objIndex);
+    // console.log(orders[objIndex]);
+    orders[objIndex].statusId = statusId;
+    orders[objIndex].quoteStatus = status;
+    // console.log(orders);
+
+    // console.log("After update: ", myArray[objIndex]);
+  };
 
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -375,7 +402,6 @@ const Orders = () => {
                   <th>Nombre</th>
                   <th>Precio</th>
                   <th>Pago del Cliente</th>
-                  <th>Pago VB</th>
                   <th>Adjuntar</th>
 
                   <th>Datos del Contacto</th>
@@ -393,8 +419,8 @@ const Orders = () => {
                   : orders
                 ).map((row) => (
                   <tr key={row.id}>
-                    <td>{row.reservationNumber}</td>
-                    <td style={{ width: 300 }} align="right">
+                    <td style={{ width: 200 }}>{row.reservationNumber}</td>
+                    <td style={{ width: 200 }} align="right">
                       {row.fullName}
                     </td>
                     <td style={{ width: 150 }} align="right">
@@ -402,14 +428,18 @@ const Orders = () => {
                     </td>
 
                     <td style={{ width: 120 }} align="right">
-                      {row.quoteStatus}
+                      <button
+                        class="hover:bg-green-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                        onClick={(event) => {
+                          openStatusModal(event, row);
+                        }}
+                        disabled={row.statusId !== 1}
+                      >
+                        {row.quoteStatus}
+                      </button>
                     </td>
 
-                    <td style={{ width: 120 }} align="right">
-                      {row.paidStatus}
-                    </td>
-
-                    <td style={{ width: 120 }} align="right">
+                    <td style={{ width: 100 }} align="right">
                       {!row.hasFiles ? (
                         <button
                           class="hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
@@ -559,6 +589,19 @@ const Orders = () => {
             contactEmail={contactEmail}
             emergencyContactPhone={emergencyContactPhone}
             emergencyContact={emergencyContact}
+          />
+        </Popup>
+
+        <Popup
+          title="Pago del Cliente"
+          openPopup={openStatusPopup}
+          setOpenPopup={setOpenStatusPopup}
+        >
+          <UpdateQuoteStatus
+            orderId={orderId}
+            statusId={"1"}
+            setOpenStatusPopup={setOpenStatusPopup}
+            updateTempOrder={updateTempOrder}
           />
         </Popup>
       </div>
