@@ -210,7 +210,9 @@ export default function AddFiles(props) {
   };
 
   const configs = new Configs();
-  const url = configs.current.URL_WS_TRAVEL_API;
+  //const url = configs.current.URL_WS_TRAVEL_API;
+  const url =
+    "https://racial-letter-production.up.railway.app/travelagency/api/v1";
 
   const saveFiles = async (e) => {
     e.preventDefault();
