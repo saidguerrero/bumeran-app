@@ -193,9 +193,10 @@ const Orders = () => {
     // console.log(id);
 
     const token = dataDecrypt(sessionStorage.getItem("token"));
-
+    const url2 =
+      "https://racial-letter-production.up.railway.app/travelagency/api/v1";
     const response = axios
-      .get(url + `/upload/${id}`, {
+      .get(url2 + `/upload/${id}`, {
         responseType: "blob",
         headers: {
           Authorization: ` ${token}`,
