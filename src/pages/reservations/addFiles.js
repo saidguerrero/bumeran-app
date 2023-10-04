@@ -179,22 +179,58 @@ export default function AddFiles(props) {
     }
   };
 
+  const [fileConfServices, setFileConfServices] = useState("");
+  const handleFileConfServices = async (event) => {
+    event.preventDefault();
+    let allFiles = event?.target?.files?.length;
+    let newFiles = [];
+    let arrayFiles64 = [];
+    if (allFiles > 2) {
+      return;
+    } else if (allFiles > 0) {
+      for (let i = 0; i < allFiles; i++) {
+        arrayFiles64.push(await toBase64(event.target.files[i]));
+        newFiles.push(event.target.files[i]);
+      }
+
+      setFileConfServices(arrayFiles64);
+    }
+    console.log("arrayFiles64");
+    console.log(arrayFiles64);
+    console.log(fileConfServices);
+    if (fileConfServices !== "") {
+      const uploadFiles = {
+        file: fileConfServices,
+        fileName: "Confirmación de Servicios",
+        fileExtension: "pdf",
+        fileTypeId: 4,
+      };
+      orderFiles.push(uploadFiles);
+    }
+  };
+
   const configs = new Configs();
   const url = configs.current.URL_WS_TRAVEL_API;
 
   const saveFiles = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // console.log("******* order *********");
-    // console.log(orderId);
-    // console.log(orderFiles);
+    console.log("******* order *********");
+    console.log(orderId);
+    console.log(orderFiles);
 
-    if (!filePayOrder || !fileTerms || !fileTravelServices) {
+    if (
+      !filePayOrder ||
+      !fileTerms ||
+      !fileTravelServices ||
+      !fileConfServices
+    ) {
       Swal.fire({
         icon: "error",
         title: "Error en validación",
         text: "Debe de adjuntar todos los archivos",
       });
+      setLoading(false);
       return;
     }
 
@@ -324,6 +360,29 @@ export default function AddFiles(props) {
                     >
                       {" "}
                       Adjuntar terminos y condiciones firmados
+                    </button>
+                  </Grid>{" "}
+                  <br />
+                  <Grid item xs={6}>
+                    <TextField
+                      margin="normal"
+                      type="file"
+                      fullWidth
+                      id="fileConfServices"
+                      name="fileConfServices"
+                      onChange={(e) => handleFileConfServices(e)}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <button
+                      className="mt-7
+                    rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                      onClick={(event) => {
+                        handleFileConfServices(event);
+                      }}
+                    >
+                      {" "}
+                      Adjuntar Confirmación de Servicios
                     </button>
                   </Grid>
                 </Grid>

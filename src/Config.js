@@ -3,8 +3,7 @@ const DEV_VARS = {
 };
 
 const PROD_AWS_VARS = {
-  URL_WS_TRAVEL_API:
-    "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency/api/v1",
+  URL_WS_TRAVEL_API: "https://api.viajesbumeran.com/travelagency/api/v1",
 };
 
 const PROD_RAILAPP_VARS = {

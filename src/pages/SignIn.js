@@ -41,8 +41,8 @@ export default function SignIn() {
 
   const url =
     // "http://localhost:9081/travelagency"; //configs.current.URL_WS_TRAVEL_API;
-    "http://api-rest-bumeran-aws-env.eba-ummp4ehp.us-east-2.elasticbeanstalk.com/travelagency";
-  // "https://racial-letter-production.up.railway.app/travelagency";
+    "https://api.viajesbumeran.com/travelagency";
+  //"https://racial-letter-production.up.railway.app/travelagency";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

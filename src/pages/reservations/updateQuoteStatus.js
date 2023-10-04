@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import { Configs } from "@/Config";
 import axios from "axios";
 import { dataDecrypt } from "@/utils/data-decrypt";
+import Loading from "@/components/Loading";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -98,6 +99,7 @@ export default function UpdateQuoteStatus(props) {
 
   return (
     <div className="bg-gray-200">
+      {loading ? <Loading /> : null}
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="md">
           <CssBaseline />
@@ -131,10 +133,8 @@ export default function UpdateQuoteStatus(props) {
                       label="exchange"
                       defaultValue={"1"}
                     >
-                      <MenuItem value="1">Pendiente</MenuItem>
                       <MenuItem value="2">Pagado</MenuItem>
                       <MenuItem value="3">Cancelado</MenuItem>
-                      <MenuItem value="4">Expirado</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

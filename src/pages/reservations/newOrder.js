@@ -393,7 +393,7 @@ export default function NewOrder() {
                       required
                       fullWidth
                       id="fullName"
-                      label="Nombre"
+                      label="Nombre del titular"
                       name="fullName"
                       autoComplete="fullName"
                       value={order.fullName}
@@ -434,7 +434,7 @@ export default function NewOrder() {
                       required
                       fullWidth
                       id="reservationNumber"
-                      label="Reservación"
+                      label="Localizador"
                       name="reservationNumber"
                       value={order.reservationNumber}
                       onChange={(e) => handleChange(e)}
@@ -447,7 +447,7 @@ export default function NewOrder() {
                       required
                       fullWidth
                       id="contactPhoneNum"
-                      label="Teléfono de Contacto"
+                      label="Teléfono del titular"
                       name="contactPhoneNum"
                       value={order.contactPhoneNum}
                       onChange={(e) => handleChange(e)}
@@ -459,7 +459,7 @@ export default function NewOrder() {
                       required
                       fullWidth
                       id="contactEmail"
-                      label="Correo de Contacto"
+                      label="Correo del titular"
                       name="contactEmail"
                       value={order.contactEmail}
                       onChange={(e) => handleChange(e)}
@@ -471,7 +471,7 @@ export default function NewOrder() {
                       required
                       fullWidth
                       id="emergencyContact"
-                      label="Contacto de Emergencia"
+                      label="Nombre de Contacto de Emergencia"
                       name="emergencyContact"
                       value={order.emergencyContact}
                       onChange={(e) => handleChange(e)}
@@ -484,7 +484,7 @@ export default function NewOrder() {
                       required
                       fullWidth
                       id="emergencyContactPhone"
-                      label="Teléfono de Emergencia"
+                      label="Teléfono de Contacto de Emergencia"
                       name="emergencyContactPhone"
                       value={order.emergencyContactPhone}
                       onChange={(e) => handleChange(e)}
@@ -636,7 +636,7 @@ export default function NewOrder() {
                   onClick={(e) => saveOrder(e)}
                   className="ml-5 rounded-md bg-blue-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Guardar
+                  Guardar Cotización
                 </button>
               </Box>
             </Box>

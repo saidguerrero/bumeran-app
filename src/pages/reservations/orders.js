@@ -408,6 +408,7 @@ const Orders = () => {
                   <th>Ficha de Pago</th>
                   <th>Paquete</th>
                   <th>Terminos Y Condiciones</th>
+                  <th>Confirmación de Servicios</th>
                 </tr>
               </thead>
               <tbody>
@@ -429,7 +430,7 @@ const Orders = () => {
 
                     <td style={{ width: 120 }} align="right">
                       <button
-                        class="hover:bg-green-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                        class="hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
                         onClick={(event) => {
                           openStatusModal(event, row);
                         }}
@@ -524,7 +525,7 @@ const Orders = () => {
                     </td>
 
                     <td style={{ width: 120 }} align="right">
-                      {
+                      {row.hasFiles ? (
                         <button
                           class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
                           onClick={(event) => {
@@ -543,7 +544,29 @@ const Orders = () => {
                             title="Terminos Y Condiciones"
                           />
                         </button>
-                      }
+                      ) : null}
+                    </td>
+                    <td style={{ width: 120 }} align="right">
+                      {row.hasFiles ? (
+                        <button
+                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            downloadFile(
+                              event,
+                              row.orderFileResponse.idConditionsOfServices,
+                              "CondicionesDelServicio"
+                            );
+                          }}
+                        >
+                          <Image
+                            alt="Condiciones del servicio"
+                            src={"/confirmacion.png"}
+                            width={35}
+                            height={35}
+                            title="Condiciones del servicio"
+                          />
+                        </button>
+                      ) : null}
                     </td>
                   </tr>
                 ))}
