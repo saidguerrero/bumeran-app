@@ -42,7 +42,7 @@ export default function SignIn() {
   const url =
     // "http://localhost:9081/travelagency"; //configs.current.URL_WS_TRAVEL_API;
     "https://api.viajesbumeran.com/travelagency";
-  //"https://racial-letter-production.up.railway.app/travelagency";
+  // "https://racial-letter-production.up.railway.app/travelagency";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -223,8 +223,6 @@ export default function SignIn() {
                 </Box>
               </Box>
             </Grid>
-
-            <Copyright sx={{ mt: 8, mb: 4 }} />
           </Container>
           <footer>
             <div className=" width: 100%  p-5 bg-center bg-cover ml-60 flex flex-col items-end justify-center ">
