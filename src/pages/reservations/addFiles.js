@@ -38,6 +38,10 @@ export default function AddFiles(props) {
 
   const [loading, setLoading] = useState(false);
   const [orderFiles, setOrderFiles] = useState([]);
+  const [orderFiles1, setOrderFiles1] = useState([]);
+  const [orderFiles2, setOrderFiles2] = useState([]);
+  const [orderFiles3, setOrderFiles3] = useState([]);
+  const [orderFiles4, setOrderFiles4] = useState([]);
   let filesToSave = [];
 
   const columns = [
@@ -97,7 +101,7 @@ export default function AddFiles(props) {
         fileExtension: "pdf",
         fileTypeId: 1,
       };
-      orderFiles.push(uploadFiles);
+      orderFiles1.push(uploadFiles);
 
       // filesToSave.push({ id: 1, name: "Orden de pago", size: "1.2 MB" });
 
@@ -137,7 +141,7 @@ export default function AddFiles(props) {
         fileExtension: "pdf",
         fileTypeId: 2,
       };
-      orderFiles.push(uploadFiles);
+      orderFiles2.push(uploadFiles);
 
       // const temp = {
       //   name: filePayOrder.name,
@@ -175,7 +179,7 @@ export default function AddFiles(props) {
         fileExtension: "pdf",
         fileTypeId: 3,
       };
-      orderFiles.push(uploadFiles);
+      orderFiles3.push(uploadFiles);
     }
   };
 
@@ -205,7 +209,7 @@ export default function AddFiles(props) {
         fileExtension: "pdf",
         fileTypeId: 4,
       };
-      orderFiles.push(uploadFiles);
+      orderFiles4.push(uploadFiles);
     }
   };
 
@@ -221,33 +225,68 @@ export default function AddFiles(props) {
     // console.log(orderId);
     // console.log(orderFiles);
 
-    // if (
-    //   !filePayOrder ||
-    //   !fileTerms ||
-    //   !fileTravelServices ||
-    //   !fileConfServices
-    // ) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Error en validación",
-    //     text: "Debe de adjuntar todos los archivos",
-    //   });
-    //   setLoading(false);
-    //   return;
-    // }
+    if (
+      !filePayOrder ||
+      !fileTerms ||
+      !fileTravelServices ||
+      !fileConfServices
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Error en validación",
+        text: "Debe de adjuntar todos los archivos",
+      });
+      setLoading(false);
+      return;
+    }
 
-    const data = {
-      orderId: sessionStorage.getItem("orderId"),
-      uploadFiles: orderFiles,
-    };
     try {
       // add "Access-Control-Allow-Origin", "*" to headers
-      const response = await axios.post(url + `/upload/aditional`, data, {
+      const data1 = {
+        orderId: sessionStorage.getItem("orderId"),
+        uploadFiles: orderFiles1,
+      };
+      // console.log(data);
+      const response = await axios.post(url + `/upload/aditional`, data1, {
         headers: {
           Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
-          "Access-Control-Allow-Origin": "*",
         },
       });
+
+      const data2 = {
+        orderId: sessionStorage.getItem("orderId"),
+        uploadFiles: orderFiles2,
+      };
+
+      const response2 = await axios.post(url + `/upload/aditional`, data2, {
+        headers: {
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+        },
+      });
+
+      const data3 = {
+        orderId: sessionStorage.getItem("orderId"),
+        uploadFiles: orderFiles3,
+      };
+
+      const response3 = await axios.post(url + `/upload/aditional`, data3, {
+        headers: {
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+        },
+      });
+
+      const data4 = {
+        orderId: sessionStorage.getItem("orderId"),
+        uploadFiles: orderFiles4,
+      };
+
+      const response4 = await axios.post(url + `/upload/aditional`, data4, {
+        headers: {
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+        },
+      });
+
+      console.log(response);
     } catch (error) {
       console.log(error);
       setLoading(false);
