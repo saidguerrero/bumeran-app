@@ -104,7 +104,7 @@ export default function SignIn() {
       );
       // console.log("*************** userData ***************");
 
-      console.log(token);
+      // console.log(token);
       // console.log(userData.data.result.fullName);
       sessionStorage.setItem("token", dataEncrypt(token));
       // console.log("login");
