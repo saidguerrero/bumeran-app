@@ -72,7 +72,7 @@ export default function AddFiles(props) {
 
   const handleFilePayOrder = async (event) => {
     event.preventDefault();
-    console.log("si entro a handleFilePayOrder");
+    // console.log("si entro a handleFilePayOrder");
     let allFiles = event?.target?.files?.length;
     let newFiles = [];
     let arrayFiles64 = [];
@@ -86,9 +86,9 @@ export default function AddFiles(props) {
 
       setFilePayOrder(arrayFiles64);
     }
-    console.log("arrayFiles64");
-    console.log(arrayFiles64);
-    console.log(filePayOrder);
+    // console.log("arrayFiles64");
+    // console.log(arrayFiles64);
+    // console.log(filePayOrder);
 
     if (filePayOrder !== "") {
       const uploadFiles = {
@@ -127,9 +127,9 @@ export default function AddFiles(props) {
 
       setFileTravelServices(arrayFiles64);
     }
-    console.log("arrayFiles64");
-    console.log(arrayFiles64);
-    console.log(fileTravelServices);
+    // console.log("arrayFiles64");
+    // console.log(arrayFiles64);
+    // console.log(fileTravelServices);
     if (fileTravelServices !== "") {
       const uploadFiles = {
         file: fileTravelServices,
@@ -165,9 +165,9 @@ export default function AddFiles(props) {
 
       setFileTerms(arrayFiles64);
     }
-    console.log("arrayFiles64");
-    console.log(arrayFiles64);
-    console.log(fileTerms);
+    // console.log("arrayFiles64");
+    // console.log(arrayFiles64);
+    // console.log(fileTerms);
     if (fileTerms !== "") {
       const uploadFiles = {
         file: fileTerms,
@@ -195,9 +195,9 @@ export default function AddFiles(props) {
 
       setFileConfServices(arrayFiles64);
     }
-    console.log("arrayFiles64");
-    console.log(arrayFiles64);
-    console.log(fileConfServices);
+    // console.log("arrayFiles64");
+    // console.log(arrayFiles64);
+    // console.log(fileConfServices);
     if (fileConfServices !== "") {
       const uploadFiles = {
         file: fileConfServices,
@@ -210,16 +210,16 @@ export default function AddFiles(props) {
   };
 
   const configs = new Configs();
-  //const url = configs.current.URL_WS_TRAVEL_API;
-  const url =
-    "https://racial-letter-production.up.railway.app/travelagency/api/v1";
+  const url = configs.current.URL_WS_TRAVEL_API;
+  // const url =
+  //   "https://racial-letter-production.up.railway.app/travelagency/api/v1";
 
   const saveFiles = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("******* order *********");
-    console.log(orderId);
-    console.log(orderFiles);
+    // console.log("******* order *********");
+    // console.log(orderId);
+    // console.log(orderFiles);
 
     if (
       !filePayOrder ||
@@ -246,7 +246,7 @@ export default function AddFiles(props) {
       },
     });
 
-    console.log(response);
+    // console.log(response);
 
     resetFiles(e);
     setLoading(false);
