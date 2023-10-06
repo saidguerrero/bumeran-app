@@ -240,11 +240,19 @@ export default function AddFiles(props) {
       orderId: sessionStorage.getItem("orderId"),
       uploadFiles: orderFiles,
     };
-    const response = await axios.post(url + `/upload/aditional`, data, {
-      headers: {
-        Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
-      },
-    });
+    try {
+      // add "Access-Control-Allow-Origin", "*" to headers
+      const response = await axios.post(url + `/upload/aditional`, data, {
+        headers: {
+          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      return;
+    }
 
     // console.log(response);
 
