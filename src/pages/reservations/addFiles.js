@@ -217,24 +217,24 @@ export default function AddFiles(props) {
   const saveFiles = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // console.log("******* order *********");
+    console.log("******* entro save files *********");
     // console.log(orderId);
     // console.log(orderFiles);
 
-    if (
-      !filePayOrder ||
-      !fileTerms ||
-      !fileTravelServices ||
-      !fileConfServices
-    ) {
-      Swal.fire({
-        icon: "error",
-        title: "Error en validación",
-        text: "Debe de adjuntar todos los archivos",
-      });
-      setLoading(false);
-      return;
-    }
+    // if (
+    //   !filePayOrder ||
+    //   !fileTerms ||
+    //   !fileTravelServices ||
+    //   !fileConfServices
+    // ) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Error en validación",
+    //     text: "Debe de adjuntar todos los archivos",
+    //   });
+    //   setLoading(false);
+    //   return;
+    // }
 
     const data = {
       orderId: sessionStorage.getItem("orderId"),
