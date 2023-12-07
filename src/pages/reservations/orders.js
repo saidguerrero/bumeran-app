@@ -409,7 +409,7 @@ const Orders = () => {
                   <th>Ficha de Pago</th>
                   <th>Paquete</th>
                   <th>Terminos Y Condiciones</th>
-                  <th>Confirmación de Servicios</th>
+                 
                 </tr>
               </thead>
               <tbody>
@@ -547,28 +547,7 @@ const Orders = () => {
                         </button>
                       ) : null}
                     </td>
-                    <td style={{ width: 120 }} align="right">
-                      {row.hasFiles ? (
-                        <button
-                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-                          onClick={(event) => {
-                            downloadFile(
-                              event,
-                              row.orderFileResponse.idConditionsOfServices,
-                              "CondicionesDelServicio"
-                            );
-                          }}
-                        >
-                          <Image
-                            alt="Condiciones del servicio"
-                            src={"/confirmacion.png"}
-                            width={35}
-                            height={35}
-                            title="Condiciones del servicio"
-                          />
-                        </button>
-                      ) : null}
-                    </td>
+                   
                   </tr>
                 ))}
 

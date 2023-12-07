@@ -21,7 +21,7 @@ export default function Header() {
           <nav>
             <div>
               <h3 className="text-base text-blue-900 group-hover:text-gray-900 font-semibold">
-                Bienvenido {context.userFullName}
+                ido {context.userFullName}
               </h3>
             </div>
           </nav>

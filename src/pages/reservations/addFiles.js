@@ -228,8 +228,7 @@ export default function AddFiles(props) {
     if (
       !filePayOrder ||
       !fileTerms ||
-      !fileTravelServices ||
-      !fileConfServices
+      !fileTravelServices 
     ) {
       Swal.fire({
         icon: "error",
@@ -275,16 +274,16 @@ export default function AddFiles(props) {
         },
       });
 
-      const data4 = {
-        orderId: sessionStorage.getItem("orderId"),
-        uploadFiles: orderFiles4,
-      };
+      // const data4 = {
+      //   orderId: sessionStorage.getItem("orderId"),
+      //   uploadFiles: orderFiles4,
+      // };
 
-      const response4 = await axios.post(url + `/upload/aditional`, data4, {
-        headers: {
-          Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
-        },
-      });
+      // const response4 = await axios.post(url + `/upload/aditional`, data4, {
+      //   headers: {
+      //     Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+      //   },
+      // });
 
       console.log(response);
     } catch (error) {
@@ -385,7 +384,7 @@ export default function AddFiles(props) {
                         handleFileTravelServices(event);
                       }}
                     >
-                      Adjuntar datos generales
+                      Adjuntar hoja 2 orden de pago
                     </button>
                   </Grid>
                   <br />
@@ -412,28 +411,8 @@ export default function AddFiles(props) {
                     </button>
                   </Grid>{" "}
                   <br />
-                  <Grid item xs={6}>
-                    <TextField
-                      margin="normal"
-                      type="file"
-                      fullWidth
-                      id="fileConfServices"
-                      name="fileConfServices"
-                      onChange={(e) => handleFileConfServices(e)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <button
-                      className="mt-7
-                    rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                      onClick={(event) => {
-                        handleFileConfServices(event);
-                      }}
-                    >
-                      {" "}
-                      Adjuntar Confirmación de Servicios
-                    </button>
-                  </Grid>
+                  
+                
                 </Grid>
                 <br />
                 {/* <div style={{ height: 200, width: "60%" }}>

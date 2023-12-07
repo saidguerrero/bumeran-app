@@ -125,6 +125,11 @@ export default function NewOrder() {
 
   const [role, setRole] = useState("");
   useEffect(() => {
+    if (sessionStorage.getItem("token") === null) {
+      console.log("redirect ");
+      router.push("/");
+    }
+    
     setLoading(true);
     setRole(dataDecrypt(sessionStorage.getItem("role")));
     fetchItems();

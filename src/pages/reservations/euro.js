@@ -60,6 +60,10 @@ export default function Euro() {
   };
 
   useEffect(() => {
+    if (sessionStorage.getItem("token") === null) {
+      console.log("redirect ");
+      router.push("/");
+    }
     const role = dataDecrypt(sessionStorage.getItem("role"));
     if (role != "Administrador" && role != "Root") {
       router.push("/reservations/orders");
