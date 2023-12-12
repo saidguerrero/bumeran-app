@@ -60,6 +60,8 @@ export default function NewOrder() {
     branchId: 0,
     salesPersonId: 0,
     exchange: "MXN",
+    commissionId : "",
+    artId : "",
   });
   const [suppliers, setSuppliers] = useState([]);
   const [cities, setCities] = useState([]);
@@ -260,7 +262,9 @@ export default function NewOrder() {
       !order.contactEmail ||
       !order.emergencyContactPhone ||
       !order.emergencyContact ||
-      !order.supplierId
+      !order.supplierId ||
+      !order.commissionId ||
+      !order.artId
     ) {
       Swal.fire({
         icon: "error",
@@ -362,6 +366,8 @@ export default function NewOrder() {
       branchId: 0,
       salesPersonId: 0,
       exchange: "MXN",
+      commissionId: "",
+      artId: ""
     });
   };
 
@@ -574,6 +580,50 @@ export default function NewOrder() {
                       </Select>
                     </FormControl>
                   </Grid>
+
+                  <Grid item xs={6}>
+                    <FormControl sx={{ width: 300 }}>
+                      <InputLabel>ID Comisión</InputLabel>
+                      <Select
+                        id="commissionId"
+                        name="commissionId"
+                        value={order.commissionId}
+                        onChange={(e) => handleChange(e)}
+                        label="ID Comisión"
+                      >
+                        <MenuItem value=""></MenuItem>
+                        <MenuItem value="301">301</MenuItem>
+                        <MenuItem value="302">302</MenuItem>
+                        <MenuItem value="303">303</MenuItem>
+                        <MenuItem value="304">304</MenuItem>
+                        <MenuItem value="305">305</MenuItem>
+                        <MenuItem value="306">306</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <FormControl sx={{ width: 300 }}>
+                      <InputLabel>ID Art</InputLabel>
+                      <Select
+                        id="artId"
+                        name="artId"
+                        value={order.artId}
+                        onChange={(e) => handleChange(e)}
+                        label="ID Art"
+                      >
+                        <MenuItem value=""></MenuItem>
+                        <MenuItem value="01">01</MenuItem>
+                        <MenuItem value="02">02</MenuItem>
+                        <MenuItem value="03">03</MenuItem>
+                        <MenuItem value="04">04</MenuItem>
+                        <MenuItem value="05">05</MenuItem>
+                        <MenuItem value="06">06</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+
                   <Grid item xs={6}>
                     <FormControl sx={{ width: 300 }}>
                       {role === "Administrador" || role === "Root" ? (

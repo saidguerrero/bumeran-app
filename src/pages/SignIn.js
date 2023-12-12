@@ -57,7 +57,7 @@ export default function SignIn() {
     });
   };
 
-  const login = async (e) => {
+  const login = async (e) => {    
     e.preventDefault();
     let token;
     const data = {
