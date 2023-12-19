@@ -647,7 +647,7 @@ export default function NewOrder() {
                       ) : null}
                     </FormControl>
                   </Grid>
-                  <Grid item xs={6} />
+                  {/* <Grid item xs={6} />
 
                   <Grid item xs={6}>
                     <input
@@ -658,8 +658,8 @@ export default function NewOrder() {
                       onChange={(e) => handleUploadfile(e)}
                       multiple
                     />
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Grid> */}
+                  {/* <Grid item xs={6}>
                     {
                       //file null or undefined botton in grey
                       files64 ? (
@@ -674,7 +674,7 @@ export default function NewOrder() {
                         </Button>
                       ) : null
                     }
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={6}>
                     <br />
                   </Grid>
