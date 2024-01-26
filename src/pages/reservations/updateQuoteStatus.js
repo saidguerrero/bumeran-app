@@ -29,7 +29,7 @@ const theme = createTheme();
 
 export default function UpdateQuoteStatus(props) {
   const { orderId, statusId, setOpenStatusPopup, updateTempOrder } = props;
-  const [newStatusId, setNewStatusId] = useState(0);
+  const [newStatusId, setNewStatusId] = useState(2);
   const [loading, setLoading] = useState(false);
 
   const configs = new Configs();
@@ -74,11 +74,14 @@ export default function UpdateQuoteStatus(props) {
       // console.log(newStatusId);
       switch (newStatusId) {
         case "2":
-          status = "PAGADO";
+          status = "CONFIRMADO";
           break;
         case "3":
           status = "CANCELADO";
           break;
+            case "4":
+              status = "EXPIRADO";
+              break;
 
         default:
           break;
@@ -131,10 +134,11 @@ export default function UpdateQuoteStatus(props) {
                       value={newStatusId}
                       onChange={(e) => setNewStatusId(e.target.value)}
                       label="exchange"
-                      defaultValue={"1"}
+                      
                     >
-                      <MenuItem value="2">Pagado</MenuItem>
+                      <MenuItem value="2">Confirmado</MenuItem>
                       <MenuItem value="3">Cancelado</MenuItem>
+                      <MenuItem value="4">Expirado</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

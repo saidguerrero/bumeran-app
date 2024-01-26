@@ -220,7 +220,7 @@ export default function NewOrder() {
         travelInfo: data.travelInfo,
         supplier: data.supplier,
         reservationNumber: data.reservationNumber,
-        city: data.city,
+        city: 1,
         branch: data.branch,
         salesPerson: data.salesPerson,
         contactPhoneNum: data.contactPhoneNum,

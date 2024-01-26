@@ -135,7 +135,7 @@ const Orders = () => {
       // console.log(items);
       const items = response.data;
       // console.log(items.result);
-      // console.log(items.result.data);
+      console.log(items.result.data);
       const data = items.result.data[0];
       // console.log(data);
       setOrders(data.orders);
@@ -399,9 +399,12 @@ const Orders = () => {
             <table aria-label="custom pagination table">
               <thead>
                 <tr>
+                <th>Folio</th>
                   <th>Localizador</th>
                   <th>Nombre</th>
-                  <th>Precio</th>
+                  <th>Fecha Registro</th>
+                  <th>Pago a Broker</th>
+                  <th>Precio Final </th>
                   <th>Pago del Cliente</th>
                   <th>Adjuntar</th>
 
@@ -421,13 +424,23 @@ const Orders = () => {
                   : orders
                 ).map((row) => (
                   <tr key={row.id}>
+                      <td style={{ width: 100 }} align="right">
+                      {row.idString}
+                    </td>
                     <td style={{ width: 200 }}>{row.reservationNumber}</td>
-                    <td style={{ width: 200 }} align="right">
+                    <td style={{ width: 250 }} align="right">
                       {row.fullName}
+                    </td>
+                    <td style={{ width: 200 }} align="right">
+                      {row.orderDate}
                     </td>
                     <td style={{ width: 150 }} align="right">
                       {row.amount}
                     </td>
+                    <td style={{ width: 150 }} align="right">
+                      {row.amountWCommission}
+                    </td>
+
 
                     <td style={{ width: 120 }} align="right">
                       <button
@@ -435,7 +448,7 @@ const Orders = () => {
                         onClick={(event) => {
                           openStatusModal(event, row);
                         }}
-                        disabled={row.statusId !== 1}
+                        // disabled={row.statusId !== 1}
                       >
                         {row.quoteStatus}
                       </button>

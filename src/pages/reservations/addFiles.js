@@ -218,6 +218,50 @@ export default function AddFiles(props) {
   // const url =
   //   "https://racial-letter-production.up.railway.app/travelagency/api/v1";
 
+
+  const updateStatus = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    // console.log(orderId);
+    // console.log(newStatusId);
+    try {
+      const data = {
+        orderId: sessionStorage.getItem("orderId"),
+        statusId: 2,
+      };
+      const response = await axios.put(
+        url + `/orders/updateStatusQuote`,
+        data,
+        {
+          headers: {
+            Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+          },
+        }
+      );
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "El estatus de pago se actualizó correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+   
+     
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error al cargar los datos, contacte al administrador",
+      });
+    }
+  
+  };
+
+
   const saveFiles = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -241,8 +285,9 @@ export default function AddFiles(props) {
 
     try {
       // add "Access-Control-Allow-Origin", "*" to headers
+      const orderId =  sessionStorage.getItem("orderId");
       const data1 = {
-        orderId: sessionStorage.getItem("orderId"),
+        orderId,
         uploadFiles: orderFiles1,
       };
       // console.log(data);
@@ -253,7 +298,7 @@ export default function AddFiles(props) {
       });
 
       const data2 = {
-        orderId: sessionStorage.getItem("orderId"),
+        orderId,
         uploadFiles: orderFiles2,
       };
 
@@ -264,7 +309,7 @@ export default function AddFiles(props) {
       });
 
       const data3 = {
-        orderId: sessionStorage.getItem("orderId"),
+        orderId,
         uploadFiles: orderFiles3,
       };
 
@@ -293,6 +338,8 @@ export default function AddFiles(props) {
     }
 
     // console.log(response);
+
+    updateStatus(e);
 
     resetFiles(e);
     setLoading(false);
