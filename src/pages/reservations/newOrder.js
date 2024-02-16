@@ -62,6 +62,7 @@ export default function NewOrder() {
     exchange: "MXN",
     commissionId : "",
     artId : "",
+    commission : 0,
   });
   const [suppliers, setSuppliers] = useState([]);
   const [cities, setCities] = useState([]);
@@ -226,6 +227,7 @@ export default function NewOrder() {
         contactPhoneNum: data.contactPhoneNum,
         contactEmail: data.contactEmail,
         exchange: "MXN",
+        commission: data.commission
       });
       setLoading(false);
     } catch (error) {
@@ -424,6 +426,21 @@ export default function NewOrder() {
                       value={order.amount}
                       onChange={(e) => handleChange(e)}
                       autoComplete="amount"
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      name="commission"
+                      label="Comisión por Servicio"
+                      type="number"
+                      id="commission"
+                      value={order.commission}
+                      onChange={(e) => handleChange(e)}
+                      autoComplete="commission"
                     />
                   </Grid>
 
