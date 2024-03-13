@@ -9,6 +9,7 @@ import Layout from "@/components/layout";
 import Popup from "@/components/Popup";
 import OrderInfo from "./orderInfo";
 import UpdateQuoteStatus from "./updateQuoteStatus";
+import PartialPayment from "./partialPayment";
 import { useRouter } from "next/router";
 import axios from "axios";
 import AppContext from "@/components/AppContext";
@@ -40,6 +41,45 @@ const Orders = () => {
   const [orderId, setOrderId] = useState(0);
   const [statusId, setStatusId] = useState(0);
 
+  const [openPartialPaymentPopup, setOpenPartialPaymentPopup] = useState(false);
+  const [partialPaymentNumber, setPartialPaymentNumber] = useState(0);
+  const [amountDue, setAmountDue] = useState(0);
+
+
+  const downloadExcel = async(e) => {
+    e.preventDefault();
+    setLoading(true);
+    const idUser = sessionStorage.getItem("userId");
+
+    const roleId = sessionStorage.getItem("roleId");
+
+    const token = dataDecrypt(sessionStorage.getItem("token"));
+
+
+    const response = await axios.get(
+      url +
+        `/excel/orders?id=${idUser}&roleId=${roleId}`,
+        {
+          responseType: "blob",
+          headers: {
+            Authorization: ` ${dataDecrypt(sessionStorage.getItem("token"))}`,
+          },
+        }
+      )
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "reporte.xls");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setLoading(false);
+      })
+      .catch((response) => console.log(333, response));
+      setLoading(false);
+  };
+
   const openModal = async (e, value) => {
     e.preventDefault();
 
@@ -55,6 +95,16 @@ const Orders = () => {
     setOpenStatusPopup(true);
     console.log(value);
     setOrderId(value.id);
+  };
+
+  const openPartialPayment = async (e, value) => {
+    console.log("openPartialPayment");
+    e.preventDefault();
+    setOpenPartialPaymentPopup(true);
+    console.log(value);
+    setOrderId(value.id);
+    setPartialPaymentNumber(value.partialPaymentNumber);
+    setAmountDue(value.amountDue);
   };
 
   const uploadFiles = async (e, row) => {
@@ -182,6 +232,16 @@ const Orders = () => {
     // console.log(orders);
 
     // console.log("After update: ", myArray[objIndex]);
+  };
+
+
+  const updatePartialPayment = async (e, id, partialPaymentAmount) => {
+    e.preventDefault();
+
+    const objIndex = orders.findIndex((obj) => obj.id === id);
+
+    orders[objIndex].amountDue = orders[objIndex]?.amountDue - partialPaymentAmount;
+
   };
 
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -364,13 +424,28 @@ const Orders = () => {
       <div className="bg-gray-200">
         {loading ? <Loading /> : null}
         <div className="container flex flex-col items-end justify-center ">
-          <br />
+        
           <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
             1 USD = {dolar} MXN
           </h4>
           <h4 className="text-base text-gray-900 group-hover:text-gray-900 font-semibold">
             1 EUR = {euro} MXN
           </h4>
+      
+          <button
+                          class=" hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                          onClick={(event) => {
+                            downloadExcel(event);
+                          }}
+                        >
+                          <Image
+                            alt="Datos de Contacto"
+                            src={"/excel.png"}
+                            width={55}
+                            height={55}
+                            title="Datos de Contacto"
+                          />
+                        </button>
         </div>
         <div className="  pl-80 ">
           <TextField
@@ -412,6 +487,7 @@ const Orders = () => {
                   <th>Ficha de Pago</th>
                   <th>Paquete</th>
                   <th>Terminos Y Condiciones</th>
+                  <th>Pago Parcial</th>
                  
                 </tr>
               </thead>
@@ -560,6 +636,21 @@ const Orders = () => {
                         </button>
                       ) : null}
                     </td>
+
+                    <td style={{ width: 120 }} align="right">
+                    <button
+  className={`hover:bg-${row.paymentTypeId === 1 ? 'green-400' : 'gray-400'} text-${row.paymentTypeId === 1 ? 'green-800' : 'gray-800'} font-bold py-2 px-4 rounded inline-flex items-center`}
+  onClick={(event) => {
+    if (row.paymentTypeId === 1) {
+      openPartialPayment(event, row);
+    }
+  }}
+  disabled={row.paymentTypeId !== 1}
+>
+  Pago Parcial
+</button>
+
+                    </td>
                    
                   </tr>
                 ))}
@@ -620,6 +711,21 @@ const Orders = () => {
             updateTempOrder={updateTempOrder}
           />
         </Popup>
+
+        <Popup
+          title="Pago Parcial"
+          openPopup={openPartialPaymentPopup}
+          setOpenPopup={setOpenPartialPaymentPopup}
+        >
+          <PartialPayment
+            orderId={orderId}
+            partialPaymentNumber={partialPaymentNumber} 
+            amountDue={amountDue}
+            setOpenPartialPaymentPopup={setOpenPartialPaymentPopup}
+            updatePartialPayment={updatePartialPayment}
+          />
+        </Popup>
+
       </div>
     </Layout>
   );

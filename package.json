@@ -17,6 +17,7 @@
     "@mui/material": "^5.13.0",
     "@mui/system": "^5.14.8",
     "@mui/x-data-grid": "^6.4.0",
+    "@mui/x-date-pickers": "^6.19.5",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "base64-js": "^1.5.1",

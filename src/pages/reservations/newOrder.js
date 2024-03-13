@@ -25,6 +25,12 @@ import IconButton from "@mui/material/IconButton";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { dataDecrypt } from "@/utils/data-decrypt";
 
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -63,11 +69,32 @@ export default function NewOrder() {
     commissionId : "",
     artId : "",
     commission : 0,
+  saleId: "", 
+  serviceId: 0, 
+  paymentTypeId: 0, 
+  paymentMethodId: 0, 
+  hotel: "", 
+  numberOfPassengers: "", 
+  salesNoteNumber: "",
+  membershipNumber: "",
+  startDate: "", 
+  endDate: "", 
   });
   const [suppliers, setSuppliers] = useState([]);
   const [cities, setCities] = useState([]);
   const [branches, setBranches] = useState([]);
   const [salesPersons, setSalesPersons] = useState([]);
+
+  const [services, setServices] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [paymentTypes, setPaymentTypes] = useState([]);
+  
+  const [paymentOption, setPaymentOption] = useState("fullPayment"); 
+
+  // Función para manejar el cambio en el radio button
+  const handlePaymentOptionChange = (event) => {
+    setPaymentOption(event.target.value);
+  };
 
   const configs = new Configs();
   const url = configs.current.URL_WS_TRAVEL_API;
@@ -104,6 +131,9 @@ export default function NewOrder() {
       setCities(items.result.cities);
       setSalesPersons(items.result.salesPersons);
       setSuppliers(items.result.suppliers);
+      setServices(items.result.typeServices)
+      setPaymentMethods(items.result.paymentMethods)
+      setPaymentTypes(items.result.paymentTypes)
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -369,7 +399,17 @@ export default function NewOrder() {
       salesPersonId: 0,
       exchange: "MXN",
       commissionId: "",
-      artId: ""
+      artId: "",
+      saleId: "", 
+      serviceId: 0, 
+      paymentTypeId: 0, 
+      paymentMethodId: 0, 
+      hotel: "", 
+      numberOfPassengers: "", 
+      salesNoteNumber: "",
+      membershipNumber: "",
+      startDate: "", 
+      endDate: "", 
     });
   };
 
@@ -382,11 +422,10 @@ export default function NewOrder() {
             <CssBaseline />
             <Box
               sx={{
-                marginTop: 1,
-                marginLeft: 20,
+               
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                alignItems: "right",
               }}
             >
               <Box
@@ -397,10 +436,11 @@ export default function NewOrder() {
               >
                 <Grid
                   container
-                  rowSpacing={1}
-                  columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                  rowSpacing={3}
+                  columnSpacing={{ xs: 1, sm: 4, md: 4 }}
+                
                 >
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -414,7 +454,7 @@ export default function NewOrder() {
                       autoFocus
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -429,7 +469,30 @@ export default function NewOrder() {
                     />
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
+                      <InputLabel>Servicio Adquirido</InputLabel>
+                      <Select
+                        id="serviceId"
+                        name="serviceId"
+                        value={order.serviceId}
+                        onChange={(e) => handleChange(e)}
+                        label="Servicio Adquirido"
+                      >
+                        <MenuItem value=""></MenuItem>
+                        {services.map((item) => (
+                          <MenuItem
+                            key={item.serviceId}
+                            value={item.serviceId}
+                          >
+                            {item.description}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -444,7 +507,7 @@ export default function NewOrder() {
                     />
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -456,7 +519,23 @@ export default function NewOrder() {
                       onChange={(e) => handleChange(e)}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+
+                  <Grid item xs={3}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="hotel"
+                      label="Hotel"
+                      name="hotel"
+                      autoComplete="hotel"
+                      value={order.hotel}
+                      onChange={(e) => handleChange(e)}
+                      autoFocus
+                    />
+                  </Grid>
+
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -467,9 +546,11 @@ export default function NewOrder() {
                       value={order.reservationNumber}
                       onChange={(e) => handleChange(e)}
                     />
+
+                    
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -481,7 +562,24 @@ export default function NewOrder() {
                       onChange={(e) => handleChange(e)}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+
+                  <Grid item xs={3}>
+                  
+
+                  <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="numberOfPassengers"
+                      label="Numero de pasajeros"
+                      name="numberOfPassengers"
+                      value={order.numberOfPassengers}
+                      onChange={(e) => handleChange(e)}
+                    />
+
+                  </Grid>
+
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -493,7 +591,7 @@ export default function NewOrder() {
                       onChange={(e) => handleChange(e)}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -506,7 +604,26 @@ export default function NewOrder() {
                     />
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={3}>
+                 
+
+<TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="startDate"
+                      label="Fecha de inicio"
+                      name="startDate"
+                      type="date"
+                      value={order.startDate}
+                      onChange={(e) => handleChange(e)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={3}>
                     <TextField
                       margin="normal"
                       required
@@ -518,8 +635,8 @@ export default function NewOrder() {
                       onChange={(e) => handleChange(e)}
                     />
                   </Grid>
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       <InputLabel>Moneda</InputLabel>
                       <Select
                         id="exchange"
@@ -534,8 +651,26 @@ export default function NewOrder() {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+
+                  <Grid item xs={3}>
+                  <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="endDate"
+                      label="Fecha de fin"
+                      name="endDate"
+                      type="date"
+                      value={order.endDate}
+                      onChange={(e) => handleChange(e)}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       <InputLabel>Proveedor</InputLabel>
                       <Select
                         id="supplierId"
@@ -556,8 +691,9 @@ export default function NewOrder() {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       <InputLabel>Ciudad</InputLabel>
                       <Select
                         id="cityId"
@@ -575,8 +711,32 @@ export default function NewOrder() {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
+                      <InputLabel>Tipo de Pago del Cliente</InputLabel>
+                      <Select
+                        id="paymentTypeId"
+                        name="paymentTypeId"
+                        value={order.paymentTypeId}
+                        onChange={(e) => handleChange(e)}
+                        label="Tipo de Pago del Cliente"
+                      >
+                        <MenuItem value=""></MenuItem>
+                        {paymentTypes.map((item) => (
+                          <MenuItem
+                            key={item.paymentTypeId}
+                            value={item.paymentTypeId}
+                          >
+                            {item.description}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       <InputLabel>Unidad Price Shoes</InputLabel>
                       <Select
                         id="branchId"
@@ -598,8 +758,8 @@ export default function NewOrder() {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       <InputLabel>ID Comisión</InputLabel>
                       <Select
                         id="commissionId"
@@ -619,8 +779,31 @@ export default function NewOrder() {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
+                      <InputLabel>Forma de Pago del Cliente</InputLabel>
+                      <Select
+                        id="paymentMethodId"
+                        name="paymentMethodId"
+                        value={order.paymentMethodId}
+                        onChange={(e) => handleChange(e)}
+                        label="Forma de Pago del Cliente"
+                      >
+                        <MenuItem value=""></MenuItem>
+                        {paymentMethods.map((item) => (
+                          <MenuItem
+                            key={item.paymentMethodId}
+                            value={item.paymentMethodId}
+                          >
+                            {item.description}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       <InputLabel>ID Art</InputLabel>
                       <Select
                         id="artId"
@@ -640,9 +823,36 @@ export default function NewOrder() {
                     </FormControl>
                   </Grid>
 
+                  <Grid item xs={3}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="salesNoteNumber"
+                      label="No Nota de Venta"
+                      name="salesNoteNumber"
+                      value={order.salesNoteNumber}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Grid>
 
-                  <Grid item xs={6}>
-                    <FormControl sx={{ width: 300 }}>
+
+                  <Grid item xs={3}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="membershipNumber"
+                      label="No de Socio"
+                      name="membershipNumber"
+                      value={order.membershipNumber}
+                      onChange={(e) => handleChange(e)}
+                    />
+                  </Grid>
+
+
+                  <Grid item xs={3}>
+                    <FormControl sx={{ width: 200 }}>
                       {role === "Administrador" || role === "Root" ? (
                         <div>
                           <InputLabel>Vendedor Price Shoes</InputLabel>
@@ -664,39 +874,10 @@ export default function NewOrder() {
                       ) : null}
                     </FormControl>
                   </Grid>
-                  {/* <Grid item xs={6} />
-
-                  <Grid item xs={6}>
-                    <input
-                      accept="application/pdf"
-                      type="file"
-                      id="uploadFile"
-                      name="uploadFile"
-                      onChange={(e) => handleUploadfile(e)}
-                      multiple
-                    />
-                  </Grid> */}
-                  {/* <Grid item xs={6}>
-                    {
-                      //file null or undefined botton in grey
-                      files64 ? (
-                        <Button
-                          color="secondary"
-                          variant="contained"
-                          fullWidth
-                          onClick={fetchData}
-                          sx={{ mt: 3, mb: 2 }}
-                        >
-                          Cargar archivo
-                        </Button>
-                      ) : null
-                    }
-                  </Grid> */}
-                  <Grid item xs={6}>
-                    <br />
-                  </Grid>
+                  
+               
                 </Grid>
-
+                <div className="flex items-center">
                 <button
                   onClick={(e) => reset(e)}
                   className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mr-5"
@@ -710,6 +891,25 @@ export default function NewOrder() {
                 >
                   Guardar Cotización
                 </button>
+                {""}
+                <RadioGroup
+                  value={paymentOption}
+                  onChange={handlePaymentOptionChange}
+                  row
+                >
+                  <FormControlLabel
+                    value="fullPayment"
+                    control={<Radio />}
+                    
+                    label="Pago completo"
+                  />
+                  <FormControlLabel
+                    value="commissionOnly"
+                    control={<Radio />}
+                    label="Solo comisión"
+                  />
+                </RadioGroup>
+                </div>
               </Box>
             </Box>
           </Container>
