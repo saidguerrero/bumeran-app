@@ -79,6 +79,7 @@ export default function NewOrder() {
   membershipNumber: "",
   startDate: "", 
   endDate: "", 
+  paymentOption: "1"
   });
   const [suppliers, setSuppliers] = useState([]);
   const [cities, setCities] = useState([]);
@@ -89,7 +90,7 @@ export default function NewOrder() {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentTypes, setPaymentTypes] = useState([]);
   
-  const [paymentOption, setPaymentOption] = useState("fullPayment"); 
+  const [paymentOption, setPaymentOption] = useState(1); 
 
   // Función para manejar el cambio en el radio button
   const handlePaymentOptionChange = (event) => {
@@ -347,6 +348,8 @@ export default function NewOrder() {
       return;
     }
 
+    order.paymentOption = paymentOption;
+
     const response = await axios
       .post(
         url + `/pdf`,
@@ -410,7 +413,9 @@ export default function NewOrder() {
       membershipNumber: "",
       startDate: "", 
       endDate: "", 
+      paymentOption: 1,
     });
+    setPaymentOption(1)
   };
 
   return (
@@ -898,13 +903,13 @@ export default function NewOrder() {
                   row
                 >
                   <FormControlLabel
-                    value="fullPayment"
+                    value="1"
                     control={<Radio />}
                     
                     label="Pago completo"
                   />
                   <FormControlLabel
-                    value="commissionOnly"
+                    value="2"
                     control={<Radio />}
                     label="Solo comisión"
                   />

@@ -10,6 +10,7 @@ import Popup from "@/components/Popup";
 import OrderInfo from "./orderInfo";
 import UpdateQuoteStatus from "./updateQuoteStatus";
 import PartialPayment from "./partialPayment";
+import CommissionReleased from "./commissionReleased";
 import { useRouter } from "next/router";
 import axios from "axios";
 import AppContext from "@/components/AppContext";
@@ -44,6 +45,13 @@ const Orders = () => {
   const [openPartialPaymentPopup, setOpenPartialPaymentPopup] = useState(false);
   const [partialPaymentNumber, setPartialPaymentNumber] = useState(0);
   const [amountDue, setAmountDue] = useState(0);
+  const [amount, setAmount] = useState(0);
+
+
+  const [commissionReleased, setCommissionReleased ] = useState(0);
+  const [commissionStatus, setCommissionStatus ] = useState(0);      
+  const [openCommissionReleasedPopup, setOpenCommissionReleasedPopup] = useState(false);   
+             
 
 
   const downloadExcel = async(e) => {
@@ -105,6 +113,17 @@ const Orders = () => {
     setOrderId(value.id);
     setPartialPaymentNumber(value.partialPaymentNumber);
     setAmountDue(value.amountDue);
+    setAmount(value.amountWCommissionBD);
+  };
+
+  const openComissionReleased = async (e, value) => {
+    console.log("openComissionReleased");
+    e.preventDefault();
+    setOpenCommissionReleasedPopup(true);
+  
+    setOrderId(value.id);
+    setCommissionReleased(value.commissionReleased);
+    setCommissionStatus(value.commissionStatus);
   };
 
   const uploadFiles = async (e, row) => {
@@ -222,11 +241,30 @@ const Orders = () => {
   const updateTempOrder = async (e, id, statusId, status) => {
     e.preventDefault();
     // console.log("SI ENTRO !! updateTempOrder");
-    // console.log("status en updateTempOrder" + status);
+     console.log("status en updateTempOrder status" + status);
+     console.log("status en statusId" + statusId);
     //setLoading(true);
     const objIndex = orders.findIndex((obj) => obj.id === id);
     // console.log(objIndex);
     // console.log(orders[objIndex]);
+
+    switch (statusId) {
+      case 2:
+        status = "CONFIRMADO";
+        break;
+      case 3:
+        status = "CANCELADO";
+        break;
+      case 4:
+        status = "EXPIRADO";
+      break;
+      case 5:
+        status = "INTERESADO";
+      break;
+
+      default:
+        break;
+    }
     orders[objIndex].statusId = statusId;
     orders[objIndex].quoteStatus = status;
     // console.log(orders);
@@ -240,7 +278,21 @@ const Orders = () => {
 
     const objIndex = orders.findIndex((obj) => obj.id === id);
 
-    orders[objIndex].amountDue = orders[objIndex]?.amountDue - partialPaymentAmount;
+    console.log("datos" + orders[objIndex]?.amountWCommissionBD + " - " + partialPaymentAmount);
+    console.log( parseFloat(orders[objIndex]?.amountDue) - parseFloat(partialPaymentAmount));
+
+    orders[objIndex].amountDue = parseFloat(orders[objIndex]?.amountDue) - parseFloat(partialPaymentAmount);
+
+  };
+
+
+  const updateCommissionReleased = async (e, id, commissionReleasedAmount, newCommissionStatus) => {
+    e.preventDefault();
+
+    const objIndex = orders.findIndex((obj) => obj.id === id);
+
+    orders[objIndex].commissionReleased = commissionReleasedAmount;
+    orders[objIndex].commissionStatus = newCommissionStatus;
 
   };
 
@@ -488,6 +540,8 @@ const Orders = () => {
                   <th>Paquete</th>
                   <th>Terminos Y Condiciones</th>
                   <th>Pago Parcial</th>
+                  <th>Comisión Liberada</th>
+                  <th>Estatus Pago Cliente</th>
                  
                 </tr>
               </thead>
@@ -638,18 +692,46 @@ const Orders = () => {
                     </td>
 
                     <td style={{ width: 120 }} align="right">
-                    <button
-  className={`hover:bg-${row.paymentTypeId === 1 ? 'green-400' : 'gray-400'} text-${row.paymentTypeId === 1 ? 'green-800' : 'gray-800'} font-bold py-2 px-4 rounded inline-flex items-center`}
-  onClick={(event) => {
-    if (row.paymentTypeId === 1) {
-      openPartialPayment(event, row);
-    }
-  }}
-  disabled={row.paymentTypeId !== 1}
->
-  Pago Parcial
-</button>
+                    {row.paymentTypeId === 1 ? (
+                       <button
+                       className={ row.amountDue <= 0 ? 
+                        `hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded inline-flex items-center`
+                        :
+                        `hover:bg-blue-400 text-blue-800 font-bold py-2 px-4 rounded inline-flex items-center`}
+                         
+                       onClick={(event) => {
+                        
+                           openPartialPayment(event, row); }}
+                       disabled={row.amountDue <= 0 }
+                     >
+                       
+                       {row.amountDue <= 0 ? "Pago Liquidado" : "Pago Parcial"}    
+                     </button>
 
+                  ) : null}
+                     
+
+                    </td>
+
+                    <td>
+
+                    {row.statusId === 2 ? (
+                       <button
+                       className={ row.commissionStatus === 1 ? 
+                        `hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded inline-flex items-center`
+                        :
+                        `hover:bg-blue-400 text-blue-800 font-bold py-2 px-4 rounded inline-flex items-center`}
+                       onClick={(event) => { openComissionReleased(event, row); }} 
+                          disabled={row.commissionStatus === 1}
+                       >
+                   {row.commissionStatus === 1 ? "Comisión Liberada" : "Comision"}    
+                     </button>
+                    
+                     )  : null}
+                    </td>
+                   
+                    <td style={{ width: 150 }} align="right">
+                      {row.paymentTypeDescription }
                     </td>
                    
                   </tr>
@@ -723,6 +805,23 @@ const Orders = () => {
             amountDue={amountDue}
             setOpenPartialPaymentPopup={setOpenPartialPaymentPopup}
             updatePartialPayment={updatePartialPayment}
+            amount={amount}
+          />
+        </Popup>
+
+        <Popup
+          title="Comision liberada"
+          openPopup={openCommissionReleasedPopup}
+          setOpenPopup={setOpenCommissionReleasedPopup}
+        >
+          <CommissionReleased
+            orderId={orderId}
+            
+
+             commissionReleased={commissionReleased} 
+             commissionStatus={commissionStatus}
+             setOpenCommissionReleasedPopup= {setOpenCommissionReleasedPopup} 
+             updateCommissionReleased={updateCommissionReleased}
           />
         </Popup>
 

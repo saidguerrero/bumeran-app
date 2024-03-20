@@ -79,14 +79,17 @@ export default function UpdateQuoteStatus(props) {
         case "3":
           status = "CANCELADO";
           break;
-            case "4":
-              status = "EXPIRADO";
-              break;
+        case "4":
+          status = "EXPIRADO";
+        break;
+        case "5":
+          status = "INTERESADO";
+        break;
 
         default:
           break;
       }
-      // console.log("el estatus es: " + status);
+       console.log("el estatus es: " + status);
       updateTempOrder(e, orderId, newStatusId, status);
     } catch (error) {
       console.log(error);
@@ -139,6 +142,7 @@ export default function UpdateQuoteStatus(props) {
                       <MenuItem value="2">Confirmado</MenuItem>
                       <MenuItem value="3">Cancelado</MenuItem>
                       <MenuItem value="4">Expirado</MenuItem>
+                      <MenuItem value="5">Interesado</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

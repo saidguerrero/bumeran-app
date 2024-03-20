@@ -16,6 +16,10 @@ import Loading from "@/components/Loading";
 
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -27,14 +31,14 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const theme = createTheme();
 
-export default function PartialPayment(props) {
+export default function CommissionReleased(props) {
   const router = useRouter();
 
-  const { orderId, partialPaymentNumber, amountDue, setOpenPartialPaymentPopup, updatePartialPayment, amount } = props;
-  const [paymentAmount, setPaymentAmount] = useState(0);
+  const { orderId, commissionReleased, commissionStatus,  setOpenCommissionReleasedPopup, updateCommissionReleased } = props;
+
   const [paymentMethodId, setPaymentMethodId] = useState(0);
-  const [partialPaymentAmount, setPartialPaymentAmount] = useState(0);
-  const [amountDueNew, setAmountDueNew] = useState(amountDue == 0 ? amount : amountDue);
+  const [commissionReleasedAmount, setCommissionReleasedAmount] = useState(0);
+  const [newCommissionStatus, setNewCommissionStatus] = useState(0);
 
   
   const [loading, setLoading] = useState(false);
@@ -43,10 +47,10 @@ export default function PartialPayment(props) {
   const url = configs.current.URL_WS_TRAVEL_API;
 
   const reset = (e) => {
-    setOpenPartialPaymentPopup(false);
+    setOpenCommissionReleasedPopup(false);
   };
 
-  const handlePartialPayment = async (e) => {
+  const handleCommissionReleased = async (e) => {
     e.preventDefault();
     setLoading(true);
     // console.log(orderId);
@@ -54,13 +58,12 @@ export default function PartialPayment(props) {
     try {
       const data = {
         orderId,
-        partialPaymentNumber: partialPaymentNumber + 1,
-        paymentAmount:partialPaymentAmount,
-        paymentMethodId
+        commissionReleased: commissionReleasedAmount,
+        commissionStatus: newCommissionStatus
 
       };
-      const response = await axios.post(
-        url + `/partialPayment`,
+      const response = await axios.put(
+        url + `/orders/updateCommissionReleased`,
         data,
         {
           headers: {
@@ -70,34 +73,34 @@ export default function PartialPayment(props) {
       );
 
       setLoading(false);
-      setOpenPartialPaymentPopup(false);
+      setOpenCommissionReleasedPopup(false);
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: "¡Pago parcial realizado con éxito!",
+        title: "¡Comision liberada se actualizo con éxito!",
         showConfirmButton: false,
         timer: 1500,
       });
      
-      updatePartialPayment(e, orderId, partialPaymentAmount);
+      updateCommissionReleased(e, orderId, commissionReleasedAmount, newCommissionStatus);
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setOpenPartialPaymentPopup(false);
+      setOpenCommissionReleasedPopup(false);
 
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error al procesar el pago parcial. Por favor, inténtalo de nuevo más tarde.",
+        text: "Error al procesar Comision liberada. Por favor, inténtalo de nuevo más tarde.",
       });
     }
   };
 
-  const handlePartialPaymentChange = (e) => {
-    console.log("entro a handlePartialPaymentChange ")
+  const handleOnChange = (e) => {
+    console.log("entro a handleOnChange ")
     const newValue = parseFloat(e.target.value) || 0; // Convertir el valor a número, o 0 si no es un número
     console.log(newValue)
-    setPartialPaymentAmount(newValue);
+    setCommissionReleasedAmount(newValue);
     //setAmountDueNew((prevAmountDue) => prevAmountDue - newValue); // Restar partialPaymentAmount de amountDue
   };
 
@@ -126,48 +129,39 @@ export default function PartialPayment(props) {
                 rowSpacing={1}
                 columnSpacing={{ xs: 1, sm: 2, md: 3 }}
               >
-                 <Grid item xs={4}>
-                    <TextField
-                      margin="normal"
-                      required
-                      disabled
-                      name="amount"
-                      label="Numero de Parcialidad"
-                      type="number"
-                      id="amount"
-                      value={partialPaymentNumber + 1}
-                      autoComplete="amount"
-                    />
-                  </Grid>
 
               <Grid item xs={4}>
                     <TextField
                       margin="normal"
                       required
                      
-                      name="amount"
-                      label="Monto parcial del pago"
+                      name="commissionReleased"
+                      label="Comision Liberada"
                       type="number"
-                      id="amount"
-                      value={partialPaymentAmount}
-                      onChange={(e)=> handlePartialPaymentChange(e)}
-                      autoComplete="amount"
+                      id="commissionReleased"
+                      value={commissionReleasedAmount}
+                      onChange={(e)=> handleOnChange(e)}
+                   
                     />
                   </Grid>
-
-                  <Grid item xs={4}>
-                    <TextField
-                      margin="normal"
-                      required
-                      disabled
-                      name="amount"
-                      label="Monto Adeudado"
-                      type="number"
-                      id="amount"
-                      value={amountDueNew}
-                      autoComplete="amount"
-                    />
-                  </Grid>
+                  <Grid item xs={6}>
+                  <FormControl sx={{ width: 300 }}>
+                    <InputLabel>Estatus de comision</InputLabel>
+                    <Select
+                      id="commissionStatus"
+                      name="commissionStatus"
+                      value={newCommissionStatus}
+                      onChange={(e) => setNewCommissionStatus(e.target.value)}
+                      label="commissionStatus"
+                      
+                    >
+                       <MenuItem value="0">NO</MenuItem>
+                      <MenuItem value="1">SI</MenuItem>
+                     
+                    </Select>
+                  </FormControl>
+                </Grid>
+                 
                
                 <Grid item xs={6}>
                   <br />
@@ -183,9 +177,9 @@ export default function PartialPayment(props) {
               {""}
               <button
                   className="rounded-md bg-blue-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  onClick={(e) => handlePartialPayment(e)}
+                  onClick={(e) => handleCommissionReleased(e)}
                 >
-                  Realizar Pago Parcial
+                  Guardar
                 </button>
             </Box>
           </Box>
