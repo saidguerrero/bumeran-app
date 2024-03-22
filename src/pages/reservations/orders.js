@@ -529,10 +529,10 @@ const Orders = () => {
                 <th>Folio</th>
                   <th>Localizador</th>
                   <th>Nombre</th>
-                  <th>Fecha Registro</th>
-                  <th>Pago a Broker</th>
-                  <th>Precio Final </th>
-                  <th>Pago del Cliente</th>
+                  <th>Fecha de Venta</th>
+                  <th>Precio del Servicio</th>
+                  <th>Costo Total al Cliente </th>
+                  <th>Estatus de pago</th>
                   <th>Adjuntar</th>
 
                   <th>Datos del Contacto</th>
