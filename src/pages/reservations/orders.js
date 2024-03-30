@@ -279,9 +279,22 @@ const Orders = () => {
     const objIndex = orders.findIndex((obj) => obj.id === id);
 
     console.log("datos" + orders[objIndex]?.amountWCommissionBD + " - " + partialPaymentAmount);
-    console.log( parseFloat(orders[objIndex]?.amountDue) - parseFloat(partialPaymentAmount));
+    console.log( parseFloat(orders[objIndex]?.amountWCommissionBD) - parseFloat(partialPaymentAmount));
+    
+    // validar si el monto a pagar es 0 quiere decir que aun no se comienza a pagar 
 
-    orders[objIndex].amountDue = parseFloat(orders[objIndex]?.amountDue) - parseFloat(partialPaymentAmount);
+    if(orders[objIndex].amountDue === 0 && orders[objIndex]?.partialPaymentNumber === 0) {
+      orders[objIndex].amountDue = parseFloat(orders[objIndex]?.amountWCommissionBD) - parseFloat(partialPaymentAmount);
+    
+      console.log( orders[objIndex]?.amountDue );
+
+    } else {
+      orders[objIndex].amountDue = parseFloat(orders[objIndex]?.amountDue) - parseFloat(partialPaymentAmount);
+     
+      console.log( orders[objIndex]?.amountDue );
+    }
+    orders[objIndex].partialPaymentNumber = parseFloat(orders[objIndex]?.partialPaymentNumber) + 1;
+   
 
   };
 
@@ -694,7 +707,7 @@ const Orders = () => {
                     <td style={{ width: 120 }} align="right">
                     {row.paymentTypeId === 1 ? (
                        <button
-                       className={ row.amountDue <= 0 ? 
+                       className={ row.amountDue <= 0 && row.partialPaymentNumber > 0 ? 
                         `hover:bg-green-400 text-green-800 font-bold py-2 px-4 rounded inline-flex items-center`
                         :
                         `hover:bg-blue-400 text-blue-800 font-bold py-2 px-4 rounded inline-flex items-center`}
@@ -702,10 +715,10 @@ const Orders = () => {
                        onClick={(event) => {
                         
                            openPartialPayment(event, row); }}
-                       disabled={row.amountDue <= 0 }
+                       disabled={row.amountDue <= 0 && row.partialPaymentNumber > 0 }
                      >
                        
-                       {row.amountDue <= 0 ? "Pago Liquidado" : "Pago Parcial"}    
+                       {row.amountDue <= 0 && row.partialPaymentNumber > 0 ? "Pago Liquidado" : "Pago Parcial"}    
                      </button>
 
                   ) : null}
