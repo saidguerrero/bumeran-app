@@ -13,6 +13,6 @@ const PROD_RAILAPP_VARS = {
 
 export class Configs {
   constructor() {
-    this.current = DEV_VARS;
+    this.current = PROD_AWS_VARS;
   }
 }
