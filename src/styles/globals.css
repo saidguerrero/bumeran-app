@@ -66,3 +66,18 @@
     padding-top: 90px;
   }
   
+
+  .my-table {
+    margin: 0 auto; /* Centrar la tabla horizontalmente */
+    border-collapse: collapse; /* Colapsar bordes de la tabla */
+}
+
+.my-table td,
+.my-table th {
+    border: 1px solid black; /* Establecer bordes de celdas */
+    padding: 8px; /* Añadir espacio interno a celdas */
+}
+
+.my-table tr {
+    height: 40px; /* Establecer altura de filas */
+}

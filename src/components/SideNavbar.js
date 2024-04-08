@@ -54,7 +54,7 @@ const SideNavbar = () => {
                     className="text-2x1 text-white group-hover:text-blue-900"
                   />
                   <h3 className="text-base text-white group-hover:text-blue-900 font-semibold">
-                    Reservaciones
+                    Cotizaciones
                   </h3>
                 </div>
               </Link>
@@ -74,7 +74,25 @@ const SideNavbar = () => {
                     className="text-2x1 text-white group-hover:text-blue-900"
                   />
                   <h3 className="text-base text-white group-hover:text-blue-900 font-semibold">
-                    Crear Cotización
+                    Reservaciones
+                  </h3>
+                </div>
+              </Link>
+
+              <Link href="#" onClick={openOrders}>
+                <div
+                  className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-white p-2 rounded-md 
+                group cursor-pointer hover:shadow-lg m-auto"
+                >
+                  <Image
+                    alt="Ordenes"
+                    src={"/reservaciones.png"}
+                    width={25}
+                    height={25}
+                    className="text-2x1 text-white group-hover:text-blue-900"
+                  />
+                  <h3 className="text-base text-white group-hover:text-blue-900 font-semibold">
+                    Estadisticas
                   </h3>
                 </div>
               </Link>
@@ -125,8 +143,28 @@ const SideNavbar = () => {
             </div>
 
             {/* logout */}
-            <div className="my-4 w-full">
+            <div className="my-40 w-full">
               {/* otro icono */}
+
+              <Link href="/reservations/help" onClick={openOrders}>
+                <div
+                  className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-white p-2 rounded-md 
+                group cursor-pointer hover:shadow-lg m-auto"
+                >
+                  <Image
+                    alt="Ordenes"
+                    src={"/reservaciones.png"}
+                    width={25}
+                    height={25}
+                    className="text-2x1 text-white group-hover:text-blue-900"
+                  />
+                  <h3 className="text-base text-white group-hover:text-blue-900 font-semibold">
+                    Ayuda
+                  </h3>
+                </div>
+              </Link>
+
+
               <Link href="/" onClick={() => handleSessionClear()}>
                 <div
                   className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-white p-2 rounded-md 

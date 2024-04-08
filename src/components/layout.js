@@ -11,11 +11,15 @@ const Layout = ({ children, title = "viajes Bumeran", description = "" }) => {
         <title>{title}</title>
         <meta name="description" content={description} />
       </Head>
-      <Header />
-      <SideNavbar />
-      {/* <Sidebar /> */}
-      {children}
-      <Footer />
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <Header />
+        <SideNavbar />
+        {/* <Sidebar /> */}
+        <main style={{ flex: 1 }}>
+          {children}
+        </main>
+        <Footer />
+      </div>
     </>
   );
 };
