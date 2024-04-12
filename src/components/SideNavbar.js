@@ -143,7 +143,7 @@ const SideNavbar = () => {
             </div>
 
             {/* logout */}
-            <div className="my-40 w-full">
+            <div className="my-20 w-full">
               {/* otro icono */}
 
               <Link href="/reservations/help" onClick={openOrders}>
